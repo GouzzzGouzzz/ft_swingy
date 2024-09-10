@@ -1,7 +1,7 @@
 package ft.swingy.Artifacts;
 
 public interface Builder {
-    public void setQuality();
-    public void setType();
-    public void setTier();
+    public void setQuality(int quality);
+    public void setType(String type);
+    public void setTier(int type);
 }

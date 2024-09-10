@@ -11,23 +11,23 @@ public class ArtifactBuilder implements Builder {
     }
 
     public void reset() {
-        this.artifact = new Artifact();
+        artifact = new Artifact();
     }
 
     public void setQuality(int quality) {
-        this.artifact.quality = quality;
+        artifact.quality = quality;
     }
 
     public void setType(String type) {
-        this.artifact.type = type;
+        artifact.type = type;
     }
 
     public void setTier(int tier) {
-        this.artifact.tier = tier;
+        artifact.tier = tier;
     }
 
     public Artifact getArtifact() {
-        return this.artifact;
+        return artifact;
     }
 
 }
