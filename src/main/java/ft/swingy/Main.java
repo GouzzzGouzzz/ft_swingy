@@ -3,9 +3,15 @@ package ft.swingy;
 import ft.swingy.Hero.HeroBuilder;
 import ft.swingy.Hero.HeroDirector;
 import ft.swingy.Artifacts.ArtifactBuilder;
+
+import java.util.Map;
+
+import javax.swing.SwingUtilities;
+
 import ft.swingy.Artifacts.Artifact;
 import ft.swingy.Artifacts.ArtifactDirector;
-import ft.swingy.GUI.GUI;
+import ft.swingy.Game.GameMap;
+import ft.swingy.GameGUI.GameGUI;
 import ft.swingy.Hero.Hero;
 
 public class Main
@@ -24,9 +30,12 @@ public class Main
         //     art = artifactDirector.makeT1(artifactBuilder);
         //     art.printStats();
         // }
-
-        GUI gui = new GUI();
-        GUI.createGui();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                GameMap map = new GameMap(13);
+                GameGUI.createGui(map);
+            }
+        });
 
     }
 }
