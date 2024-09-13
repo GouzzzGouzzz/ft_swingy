@@ -25,7 +25,7 @@ public class GameMap {
     }
 
     public int getPlayerPosYAsTile() {
-        return playerX * 32;
+        return playerY * 32;
     }
 
     public boolean movePlayer(int key) {

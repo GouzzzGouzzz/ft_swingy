@@ -1,7 +1,5 @@
 package ft.swingy.Hero;
 
-import ft.swingy.Hero.HeroBuilder;
-
 public class HeroDirector {
     static public Hero makeWarrior(HeroBuilder builder, String name) {
         builder.reset();

@@ -1,8 +1,5 @@
 package ft.swingy.Hero;
 
-import ft.swingy.Hero.Builder;
-import ft.swingy.Hero.Hero;
-
 public class HeroBuilder implements Builder {
     private Hero hero;
 

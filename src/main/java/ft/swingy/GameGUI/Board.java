@@ -2,6 +2,9 @@ package ft.swingy.GameGUI;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import ft.swingy.Game.GameMap;
@@ -16,20 +19,52 @@ public class Board extends JPanel{
     private int playerY;
     private final int mapTileSize;
     private GameMap map;
-    private boolean init = false;
+    private boolean init;
 
     public Board(GameMap map){
         this.map = map;
         mapTileSize = map.getSize() * 32;
+        init = false;
         try {
             tileset = ImageIO.read(new File("src/main/java/ft/swingy/Assets/tiles.png"));
         }
         catch (Exception e) {
             System.out.println("ERROR\n");
         }
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                updatePlayerPosition();
+            }
+        });
+
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_W:
+                        if (map.movePlayer(KeyEvent.VK_W))
+                            movePlayer(KeyEvent.VK_W);
+                        break;
+                    case KeyEvent.VK_S:
+                        if (map.movePlayer(KeyEvent.VK_S))
+                            movePlayer(KeyEvent.VK_S);
+                        break;
+                    case KeyEvent.VK_A:
+                        if (map.movePlayer(KeyEvent.VK_A))
+                            movePlayer(KeyEvent.VK_A);
+                        break;
+                    case KeyEvent.VK_D:
+                        if (map.movePlayer(KeyEvent.VK_D))
+                            movePlayer(KeyEvent.VK_D);
+                        break;
+                }
+            }
+        });
     }
 
-    public void movePlayer(int key){
+    private void movePlayer(int key){
         switch (key) {
             case KeyEvent.VK_W:
                 playerY -= 32;
@@ -66,6 +101,7 @@ public class Board extends JPanel{
             playerY = ((playerY + 31) / 32) * 32;
             init = true;
         }
+
         for (int i = 0; i < this.getSize().width; i += 32) {
             for (int j = 0; j < this.getSize().height; j += 32) {
                 if (i == playerX && j == playerY){
@@ -79,21 +115,6 @@ public class Board extends JPanel{
         }
     }
 
-    //this doesn't work as intended
-    //BUG : player position is not correctly updated
-    public void updatePlayerPosition(){
-        if (!init)
-            return;
-        mapStartX = (this.getSize().width - mapTileSize) / 2;
-        mapStartY = (this.getSize().height - mapTileSize) / 2;
-        playerX = mapStartX + map.getPlayerPosXAsTile();
-        playerY = mapStartY + map.getPlayerPosYAsTile();
-        //Round up to 32 to be aligned with tiles
-        playerX = ((playerX + 31) / 32) * 32;
-        playerY = ((playerY + 31) / 32) * 32;
-        repaint();
-    }
-
     private void drawGrid(Graphics g){
         for (int i = 0; i < this.getSize().width; i += 32) {
             g.drawLine(i, 0, i, this.getSize().height);
@@ -101,6 +122,14 @@ public class Board extends JPanel{
         for (int j = 0; j < this.getSize().height; j += 32) {
             g.drawLine(0, j, this.getSize().width, j);
         }
+    }
+
+    private void updatePlayerPosition(){
+        playerX = mapStartX + map.getPlayerPosXAsTile();
+        playerY = mapStartY + map.getPlayerPosYAsTile();
+        playerX = ((playerX + 31) / 32) * 32;
+        playerY = ((playerY + 31) / 32) * 32;
+        repaint();
     }
 
     @Override
