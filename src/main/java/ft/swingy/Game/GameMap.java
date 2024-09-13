@@ -31,17 +31,17 @@ public class GameMap {
     public boolean movePlayer(int key) {
         switch (key) {
             case KeyEvent.VK_W:
-                if (playerY + 1 < size){
+                if (playerY - 1 >= 0){
                     map[playerX][playerY] = ID.Empty.getId();
-                    playerY++;
+                    playerY--;
                     map[playerX][playerY] = ID.Player.getId();
                     return true;
                 }
                 break;
             case KeyEvent.VK_S:
-                if (playerY - 1 >= 0){
+                if (playerY + 1 < size){
                     map[playerX][playerY] = ID.Empty.getId();
-                    playerY--;
+                    playerY++;
                     map[playerX][playerY] = ID.Player.getId();
                     return true;
                 }

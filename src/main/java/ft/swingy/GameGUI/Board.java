@@ -127,8 +127,10 @@ public class Board extends JPanel{
     private void updatePlayerPosition(){
         playerX = mapStartX + map.getPlayerPosXAsTile();
         playerY = mapStartY + map.getPlayerPosYAsTile();
+        System.out.println("before: " + playerX + " " + playerY);
         playerX = ((playerX + 31) / 32) * 32;
         playerY = ((playerY + 31) / 32) * 32;
+        System.out.println("after: " + playerX + " " + playerY);
         repaint();
     }
 
