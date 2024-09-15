@@ -7,6 +7,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
+
+import ft.swingy.Game.ID;
 import ft.swingy.Game.GameMap;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -31,7 +33,6 @@ public class Board extends JPanel{
         catch (Exception e) {
             System.out.println("ERROR\n");
         }
-
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -90,7 +91,7 @@ public class Board extends JPanel{
         BufferedImage mapTile = getTile(Tiles.GRASS.getPos());
         BufferedImage oobTile = getTile(Tiles.WATER.getPos());
         BufferedImage playerTile = getTile(Tiles.TEMP.getPos());
-
+        BufferedImage enemyTile = getTile(Tiles.Enemy.getPos());
         mapStartX = (this.getSize().width - mapTileSize) / 2;
         mapStartY = (this.getSize().height - mapTileSize) / 2;
         if (!init){
@@ -107,8 +108,13 @@ public class Board extends JPanel{
                 if (i == playerX && j == playerY){
                     g.drawImage(playerTile, i, j, null);
                 }
-                else if (j >= mapStartY && i >= mapStartX && j < mapTileSize + mapStartY && i < mapTileSize + mapStartX)
-                    g.drawImage(mapTile, i, j, null);
+                else if (j >= mapStartY && i >= mapStartX && j < mapTileSize + mapStartY && i < mapTileSize + mapStartX){
+                    if (map.getAt((i - mapStartX) /32, (j - mapStartY)/32) == ID.Enemy.getId()){
+                        g.drawImage(enemyTile, i, j, null);
+                    }
+                    else
+                        g.drawImage(mapTile, i, j, null);
+                }
                 else
                     g.drawImage(oobTile, i, j, null);
             }
@@ -127,10 +133,8 @@ public class Board extends JPanel{
     private void updatePlayerPosition(){
         playerX = mapStartX + map.getPlayerPosXAsTile();
         playerY = mapStartY + map.getPlayerPosYAsTile();
-        System.out.println("before: " + playerX + " " + playerY);
         playerX = ((playerX + 31) / 32) * 32;
         playerY = ((playerY + 31) / 32) * 32;
-        System.out.println("after: " + playerX + " " + playerY);
         repaint();
     }
 

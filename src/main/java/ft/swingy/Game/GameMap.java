@@ -1,6 +1,7 @@
 package ft.swingy.Game;
 
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 public class GameMap {
     int size;
@@ -10,10 +11,24 @@ public class GameMap {
 
     public GameMap(int size) {
         this.size = size;
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
         map = new int[size][size];
         playerX = size / 2;
         playerY = size / 2;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (random.nextInt(100) < 50)
+                    map[i][j] = ID.Enemy.getId();
+                else
+                    map[i][j] = ID.Empty.getId();
+            }
+        }
         map[playerX][playerY] = ID.Player.getId();
+    }
+
+    public int getAt(int x, int y) {
+        return map[x][y];
     }
 
     public int getSize() {
