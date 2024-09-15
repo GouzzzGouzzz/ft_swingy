@@ -90,8 +90,17 @@ public class Board extends JPanel{
     private void drawMap(Graphics g){
         BufferedImage mapTile = getTile(Tiles.GRASS.getPos());
         BufferedImage oobTile = getTile(Tiles.WATER.getPos());
-        BufferedImage playerTile = getTile(Tiles.TEMP.getPos());
-        BufferedImage enemyTile = getTile(Tiles.Enemy.getPos());
+        BufferedImage playerTile = getTile(Tiles.PLAYER.getPos());
+        BufferedImage enemyTile = getTile(Tiles.ENEMY.getPos());
+        BufferedImage topTile = getTile(Tiles.TOP.getPos());
+        BufferedImage bottomTile = getTile(Tiles.BOTTOM.getPos());
+        BufferedImage leftTile = getTile(Tiles.LEFT.getPos());
+        BufferedImage rightTile = getTile(Tiles.RIGHT.getPos());
+        BufferedImage topLeftTile = getTile(Tiles.TOPLEFT.getPos());
+        BufferedImage topRightTile = getTile(Tiles.TOPRIGHT.getPos());
+        BufferedImage bottomLeftTile = getTile(Tiles.BOTTOMLEFT.getPos());
+        BufferedImage bottomRightTile = getTile(Tiles.BOTTOMRIGHT.getPos());
+
         mapStartX = (this.getSize().width - mapTileSize) / 2;
         mapStartY = (this.getSize().height - mapTileSize) / 2;
         if (!init){
@@ -104,19 +113,35 @@ public class Board extends JPanel{
         }
 
         for (int i = 0; i < this.getSize().width; i += 32) {
-            for (int j = 0; j < this.getSize().height; j += 32) {
-                if (i == playerX && j == playerY){
+            for (int j = 0; j < this.getSize().height; j += 32)
+            {
+                if (i == playerX && j == playerY)
                     g.drawImage(playerTile, i, j, null);
-                }
                 else if (j >= mapStartY && i >= mapStartX && j < mapTileSize + mapStartY && i < mapTileSize + mapStartX){
-                    if (map.getAt((i - mapStartX) /32, (j - mapStartY)/32) == ID.Enemy.getId()){
+                    if (map.getAt((i - mapStartX) /32, (j - mapStartY)/32) == ID.Enemy.getId())
                         g.drawImage(enemyTile, i, j, null);
-                    }
-                    else
+                    else if (map.getAt((i - mapStartX) /32, (j - mapStartY)/32) == ID.Empty.getId())
                         g.drawImage(mapTile, i, j, null);
                 }
+                else if (i + 32 >= mapStartX && i < mapStartX && j >= mapStartY && j < mapStartY + mapTileSize)
+                    g.drawImage(leftTile, i, j, null);
+                else if (j + 32 >= mapStartY && j < mapStartY && i >= mapStartX && i < mapStartX + mapTileSize)
+                    g.drawImage(topTile, i, j, null);
+                else if (i - 32 >= mapStartX && i < mapStartX + mapTileSize + 32 && j >= mapStartY && j < mapStartY + mapTileSize)
+                    g.drawImage(rightTile, i, j, null);
+                else if (j - 32 >= mapStartY && j < mapStartY + mapTileSize + 32 && i >= mapStartX && i < mapStartX + mapTileSize)
+                    g.drawImage(bottomTile, i, j, null);
+                else if (i + 32 >= mapStartX && i < mapStartX && j <= mapStartY && j + 32 >= mapStartY)
+                    g.drawImage(topLeftTile, i, j, null);
+                else if (i - 32 <= mapStartX + mapTileSize && i > mapStartX + mapTileSize && j <= mapStartY && j + 32 >= mapStartY)
+                    g.drawImage(topRightTile, i, j, null);
+                else if (i + 32 >= mapStartX && i < mapStartX && j - 32 <= mapStartY + mapTileSize && j > mapStartY + mapTileSize)
+                    g.drawImage(bottomLeftTile, i, j, null);
+                else if (i - 32 <= mapStartX + mapTileSize && i > mapStartX + mapTileSize && j - 32 <= mapStartY + mapTileSize && j > mapStartY + mapTileSize)
+                    g.drawImage(bottomRightTile, i, j, null);
                 else
                     g.drawImage(oobTile, i, j, null);
+                System.out.println("i: " + i + " j: " + j + " mapStartX: " + mapStartX + " mapStartY: " + mapStartY);
             }
         }
     }
