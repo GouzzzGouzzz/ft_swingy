@@ -141,7 +141,6 @@ public class Board extends JPanel{
                     g.drawImage(bottomRightTile, i, j, null);
                 else
                     g.drawImage(oobTile, i, j, null);
-                System.out.println("i: " + i + " j: " + j + " mapStartX: " + mapStartX + " mapStartY: " + mapStartY);
             }
         }
     }

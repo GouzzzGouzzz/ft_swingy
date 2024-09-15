@@ -1,8 +1,5 @@
 package ft.swingy.Artifacts;
 
-import ft.swingy.Artifacts.Artifact;
-import ft.swingy.Artifacts.Builder;
-
 public class ArtifactBuilder implements Builder {
     private Artifact artifact;
 

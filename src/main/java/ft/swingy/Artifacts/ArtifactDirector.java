@@ -1,7 +1,5 @@
 package ft.swingy.Artifacts;
 
-import ft.swingy.Artifacts.Artifact;
-
 public class ArtifactDirector {
     private final String[] types = {"Weapon", "Armor", "Helm"};
 
