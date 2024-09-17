@@ -17,9 +17,11 @@ public class Board extends JPanel{
     private BufferedImage tileset;
     private int mapStartX;
     private int mapStartY;
+    private int mapOffsetX;
+    private int mapOffsetY;
     private int playerX;
     private int playerY;
-    private final int mapTileSize;
+    private int mapTileSize;
     private GameMap map;
     private boolean init;
 
@@ -36,7 +38,7 @@ public class Board extends JPanel{
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                updatePlayerPosition();
+                updateGUIOnResize();
             }
         });
 
@@ -68,16 +70,20 @@ public class Board extends JPanel{
     private void movePlayer(int key){
         switch (key) {
             case KeyEvent.VK_W:
-                playerY -= 32;
+                mapStartY += 32;
+                mapOffsetY += 32;
                 break;
             case KeyEvent.VK_S:
-                playerY += 32;
+                mapStartY -= 32;
+                mapOffsetY -= 32;
                 break;
             case KeyEvent.VK_A:
-                playerX -= 32;
+                mapStartX += 32;
+                mapOffsetX += 32;
                 break;
             case KeyEvent.VK_D:
-                playerX += 32;
+                mapOffsetX -= 32;
+                mapStartX -= 32;
                 break;
         }
         repaint();
@@ -88,39 +94,38 @@ public class Board extends JPanel{
     }
 
     private void drawMap(Graphics g){
-        BufferedImage mapTile = getTile(Tiles.GRASS.getPos());
-        BufferedImage oobTile = getTile(Tiles.WATER.getPos());
-        BufferedImage playerTile = getTile(Tiles.PLAYER.getPos());
-        BufferedImage enemyTile = getTile(Tiles.ENEMY.getPos());
-        BufferedImage topTile = getTile(Tiles.TOP.getPos());
-        BufferedImage bottomTile = getTile(Tiles.BOTTOM.getPos());
-        BufferedImage leftTile = getTile(Tiles.LEFT.getPos());
-        BufferedImage rightTile = getTile(Tiles.RIGHT.getPos());
-        BufferedImage topLeftTile = getTile(Tiles.TOPLEFT.getPos());
-        BufferedImage topRightTile = getTile(Tiles.TOPRIGHT.getPos());
-        BufferedImage bottomLeftTile = getTile(Tiles.BOTTOMLEFT.getPos());
-        BufferedImage bottomRightTile = getTile(Tiles.BOTTOMRIGHT.getPos());
 
-        mapStartX = (this.getSize().width - mapTileSize) / 2;
-        mapStartY = (this.getSize().height - mapTileSize) / 2;
+        final BufferedImage mapTile = getTile(Tiles.GRASS.getPos());
+        final BufferedImage oobTile = getTile(Tiles.WATER.getPos());
+        final BufferedImage playerTile = getTile(Tiles.PLAYER.getPos());
+        final BufferedImage enemyTile = getTile(Tiles.ENEMY.getPos());
+        final BufferedImage topTile = getTile(Tiles.TOP.getPos());
+        final BufferedImage bottomTile = getTile(Tiles.BOTTOM.getPos());
+        final BufferedImage leftTile = getTile(Tiles.LEFT.getPos());
+        final BufferedImage rightTile = getTile(Tiles.RIGHT.getPos());
+        final BufferedImage topLeftTile = getTile(Tiles.TOPLEFT.getPos());
+        final BufferedImage topRightTile = getTile(Tiles.TOPRIGHT.getPos());
+        final BufferedImage bottomLeftTile = getTile(Tiles.BOTTOMLEFT.getPos());
+        final BufferedImage bottomRightTile = getTile(Tiles.BOTTOMRIGHT.getPos());
+
         if (!init){
-            playerX = mapStartX + map.getPlayerPosXAsTile();
-            playerY = mapStartY + map.getPlayerPosYAsTile();
+            mapStartX = (this.getSize().width - mapTileSize) / 2;
+            mapStartY = (this.getSize().height - mapTileSize) / 2;
+            playerX = mapStartX + ((map.getSize() / 2) * 32);
+            playerY = mapStartY + ((map.getSize() / 2) * 32);
             //Round up to 32 to be aligned with tiles
             playerX = ((playerX + 31) / 32) * 32;
             playerY = ((playerY + 31) / 32) * 32;
             init = true;
         }
-
+        g.drawImage(playerTile,playerX, playerY, null);
         for (int i = 0; i < this.getSize().width; i += 32) {
             for (int j = 0; j < this.getSize().height; j += 32)
             {
-                if (i == playerX && j == playerY)
-                    g.drawImage(playerTile, i, j, null);
-                else if (j >= mapStartY && i >= mapStartX && j < mapTileSize + mapStartY && i < mapTileSize + mapStartX){
+                if (j >= mapStartY && i >= mapStartX && j < mapTileSize + mapStartY && i < mapTileSize + mapStartX){
                     if (map.getAt((i - mapStartX) /32, (j - mapStartY)/32) == ID.Enemy.getId())
                         g.drawImage(enemyTile, i, j, null);
-                    else if (map.getAt((i - mapStartX) /32, (j - mapStartY)/32) == ID.Empty.getId())
+                    else if (map.getAt((i - mapStartX) / 32, (j - mapStartY) / 32) == ID.Empty.getId())
                         g.drawImage(mapTile, i, j, null);
                 }
                 else if (i + 32 >= mapStartX && i < mapStartX && j >= mapStartY && j < mapStartY + mapTileSize)
@@ -154,9 +159,13 @@ public class Board extends JPanel{
         }
     }
 
-    private void updatePlayerPosition(){
-        playerX = mapStartX + map.getPlayerPosXAsTile();
-        playerY = mapStartY + map.getPlayerPosYAsTile();
+    private void updateGUIOnResize(){
+        mapStartX = (this.getSize().width - mapTileSize) / 2;
+        mapStartY = (this.getSize().height - mapTileSize) / 2;
+        playerX = mapStartX + ((map.getSize() / 2) * 32);
+        playerY = mapStartY + ((map.getSize() / 2) * 32);
+        mapStartX += mapOffsetX;
+        mapStartY += mapOffsetY;
         playerX = ((playerX + 31) / 32) * 32;
         playerY = ((playerY + 31) / 32) * 32;
         repaint();
