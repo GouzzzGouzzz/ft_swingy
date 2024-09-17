@@ -12,4 +12,16 @@ public class Artifact {
         System.out.println("Quality: " + quality);
         System.out.println("Tier: " + tier);
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getQuality() {
+        return quality;
+    }
+
+    public int getTier() {
+        return tier;
+    }
 }

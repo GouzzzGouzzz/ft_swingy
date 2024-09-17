@@ -35,49 +35,57 @@ public class GameMap {
         return size;
     }
 
-    public int getPlayerPosXAsTile() {
-        return playerX * 32;
-    }
-
-    public int getPlayerPosYAsTile() {
-        return playerY * 32;
-    }
-
-    public boolean movePlayer(int key) {
+    public int movePlayer(int key) {
         switch (key) {
             case KeyEvent.VK_W:
                 if (playerY - 1 >= 0){
                     map[playerX][playerY] = ID.Empty.getId();
                     playerY--;
+                    if (map[playerX][playerY] == ID.Enemy.getId()){
+                        map[playerX][playerY] = ID.Player.getId();
+                        return 2;
+                    }
                     map[playerX][playerY] = ID.Player.getId();
-                    return true;
+                    return 1;
                 }
                 break;
             case KeyEvent.VK_S:
                 if (playerY + 1 < size){
                     map[playerX][playerY] = ID.Empty.getId();
                     playerY++;
+                    if (map[playerX][playerY] == ID.Enemy.getId()){
+                        map[playerX][playerY] = ID.Player.getId();
+                        return 2;
+                    }
                     map[playerX][playerY] = ID.Player.getId();
-                    return true;
+                    return 1;
                 }
                 break;
             case KeyEvent.VK_A:
                 if (playerX - 1 >= 0){
                     map[playerX][playerY] = ID.Empty.getId();
                     playerX--;
+                    if (map[playerX][playerY] == ID.Enemy.getId()){
+                        map[playerX][playerY] = ID.Player.getId();
+                        return 2;
+                    }
                     map[playerX][playerY] = ID.Player.getId();
-                    return true;
+                    return 1;
                 }
                 break;
             case KeyEvent.VK_D:
                 if (playerX + 1 < size){
                     map[playerX][playerY] = ID.Empty.getId();
                     playerX++;
+                    if (map[playerX][playerY] == ID.Enemy.getId()){
+                        map[playerX][playerY] = ID.Player.getId();
+                        return 2;
+                    }
                     map[playerX][playerY] = ID.Player.getId();
-                    return true;
+                    return 1;
                 }
                 break;
         }
-        return false;
+        return 0;
     }
 }

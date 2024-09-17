@@ -24,9 +24,12 @@ public class Board extends JPanel{
     private int mapTileSize;
     private GameMap map;
     private boolean init;
+    public boolean inFight;
+    private GameGUI gameGUI;
 
-    public Board(GameMap map){
+    public Board(GameMap map, GameGUI gameGUI) {
         this.map = map;
+        this.gameGUI = gameGUI;
         mapTileSize = map.getSize() * 32;
         init = false;
         try {
@@ -42,26 +45,37 @@ public class Board extends JPanel{
             }
         });
 
-        addKeyListener(new KeyAdapter() {
+        addKeyListener(new KeyAdapter() { //need to handle fight here
             @Override
             public void keyPressed(KeyEvent e) {
+                int status = 0;
+                if (inFight)
+                    return ;
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W:
-                        if (map.movePlayer(KeyEvent.VK_W))
+                        status = map.movePlayer(KeyEvent.VK_W);
+                        if (status > 0)
                             movePlayer(KeyEvent.VK_W);
                         break;
                     case KeyEvent.VK_S:
-                        if (map.movePlayer(KeyEvent.VK_S))
+                        status = map.movePlayer(KeyEvent.VK_S);
+                        if (status > 0)
                             movePlayer(KeyEvent.VK_S);
                         break;
                     case KeyEvent.VK_A:
-                        if (map.movePlayer(KeyEvent.VK_A))
+                        status = map.movePlayer(KeyEvent.VK_A);
+                        if (status > 0)
                             movePlayer(KeyEvent.VK_A);
                         break;
                     case KeyEvent.VK_D:
-                        if (map.movePlayer(KeyEvent.VK_D))
+                        status = map.movePlayer(KeyEvent.VK_D);
+                        if (status > 0)
                             movePlayer(KeyEvent.VK_D);
                         break;
+                }
+                if (status == 2){
+                    gameGUI.toggleFightText();
+                    inFight = true;
                 }
             }
         });

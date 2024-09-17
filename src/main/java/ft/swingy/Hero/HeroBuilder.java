@@ -1,5 +1,7 @@
 package ft.swingy.Hero;
 
+import ft.swingy.Artifacts.Artifact;
+
 public class HeroBuilder implements Builder {
     private Hero hero;
 
@@ -31,6 +33,9 @@ public class HeroBuilder implements Builder {
     }
     public void setType(String type) {
         hero.type = type;
+    }
+    public void setArtifact(int index, Artifact artifact) {
+        hero.artifacts[index] = artifact;
     }
     public Hero getHero() {
         return hero;
