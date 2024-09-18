@@ -19,7 +19,7 @@ public class HeroDirector {
         builder.setLevel(1);
         builder.setExperience(0);
         builder.setAttack(75);
-        builder.setDefense(10);
+        builder.setDefense(15);
         builder.setHP(50);
         builder.setName(name);
         return builder.getHero();

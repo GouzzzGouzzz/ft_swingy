@@ -33,7 +33,7 @@ public class Main
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 GameMap map = new GameMap(13);
-                GameGUI game = new GameGUI(map);
+                GameGUI game = new GameGUI(map, HeroDirector.makeWarrior(new HeroBuilder(), "Banger"));
             }
         });
 

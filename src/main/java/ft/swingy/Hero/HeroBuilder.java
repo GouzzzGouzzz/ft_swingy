@@ -15,6 +15,7 @@ public class HeroBuilder implements Builder {
 
     public void setHP(int hp) {
         hero.hitPoints = hp;
+        hero.maxHitPoints = hp;
     }
     public void setAttack(int attack) {
         hero.attack = attack;

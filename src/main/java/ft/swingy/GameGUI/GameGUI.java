@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import java.awt.BorderLayout;
 import ft.swingy.Game.GameMap;
+import ft.swingy.Hero.Hero;
 
 
 public class GameGUI {
@@ -12,11 +13,11 @@ public class GameGUI {
     private Board board;
     private FightScreen fightScreen;
 
-    public GameGUI(GameMap map) {
+    public GameGUI(GameMap map, Hero hero) {
         frame = new JFrame("Swingy - Dungeon Crawler");
         switchModeBtn = new JButton("Console Mode");
         board = new Board(map, this);
-        fightScreen = new FightScreen(board);
+        fightScreen = new FightScreen(board, hero);
 
         //frame
         frame.setVisible(false);
