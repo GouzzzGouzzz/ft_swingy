@@ -27,6 +27,36 @@ public class Hero {
         System.out.println("HP: " + hitPoints);
     }
 
+    public String getName() {
+        return this.name;
+    }
+    public String getType() {
+        return this.type;
+    }
+    public int getExperience() {
+        return this.experience;
+    }
+    public int getAttack() {
+        return this.attack;
+    }
+    public int getDefense() {
+        return this.defense;
+    }
+    public int getHitPoints() {
+        return this.hitPoints;
+    }
+    public int getMaxHitPoints() {
+        return this.maxHitPoints;
+    }
+    public int getNextLevelXp() {
+        return this.level * 1000 + (this.level - 1) * (this.level - 1) * 450;
+    }
+
+    public int getLevel(){
+        return this.level;
+    }
+
+
     public void equipArtifact(Artifact artifact) {
         switch (artifact.getType()) {
             case "Weapon":
@@ -46,9 +76,6 @@ public class Hero {
         }
     }
 
-    public int getLevel(){
-        return this.level;
-    }
 
     private void levelUp() {
         this.level++;

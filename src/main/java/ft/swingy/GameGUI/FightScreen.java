@@ -9,19 +9,21 @@ import ft.swingy.Hero.Hero;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 
 public class FightScreen extends JPanel{
     private JButton fightBtn;
     private JButton runBtn;
     private JLabel fightText;
     private Hero hero;
+    private StatsDisplay statsDisplay;
 
-    public FightScreen(Board board, Hero hero) {
+    public FightScreen(Board board, Hero hero, StatsDisplay statsDisplay) {
         fightBtn = new JButton("Fight");
         runBtn = new JButton("Run");
         fightText = new JLabel();
         this.hero = hero;
+        this.statsDisplay = statsDisplay;
+
         //init
         add(fightText);
         add(fightBtn);
@@ -40,10 +42,13 @@ public class FightScreen extends JPanel{
             public void actionPerformed(ActionEvent e){
                 toggleVisibility();
                 if (hero.fightSimulation(new Enemy(hero.getLevel())) == false){
-                    fightText.setText("You have been defeated");
+                    fightText.setText("You have been defeated !!!");
+                    fightText.setVisible(true);
+                    statsDisplay.updateStats();
                     return ;
                 }
                 board.inFight = false;
+                statsDisplay.updateStats();
             }
         });
         runBtn.addActionListener(new ActionListener(){
@@ -51,9 +56,12 @@ public class FightScreen extends JPanel{
                 toggleVisibility();
                 if (hero.tryToRun() == false){
                     fightText.setText("You have been defeated");
+                    fightText.setVisible(true);
+                    statsDisplay.updateStats();
                     return ;
                 }
                 board.inFight = false;
+                statsDisplay.updateStats();
             }
         });
     }
