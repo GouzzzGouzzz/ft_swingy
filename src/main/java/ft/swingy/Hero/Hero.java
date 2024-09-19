@@ -1,8 +1,13 @@
 package ft.swingy.Hero;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 
 import ft.swingy.Artifacts.Artifact;
+import ft.swingy.Artifacts.ArtifactBuilder;
+import ft.swingy.Artifacts.ArtifactDirector;
 import ft.swingy.Enemy.Enemy;
 
 public class Hero {
@@ -56,7 +61,6 @@ public class Hero {
         return this.level;
     }
 
-
     public void equipArtifact(Artifact artifact) {
         switch (artifact.getType()) {
             case "Weapon":
@@ -76,7 +80,6 @@ public class Hero {
         }
     }
 
-
     private void levelUp() {
         this.level++;
         this.attack += 15;
@@ -93,6 +96,18 @@ public class Hero {
         //the power of 2 "ˆ2" is done by doing "x * x"
         if (this.experience >= this.level * 1000 + (this.level - 1) * (this.level - 1) * 450) {
             levelUp();
+        }
+    }
+
+    private void generateArtifact(int level) {
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+        Artifact droppedArtifact;
+        ArtifactDirector director = new ArtifactDirector();
+
+        if (random.nextInt(100) <= 10){
+            droppedArtifact = director.randomArtifacts(new ArtifactBuilder(), level);
+            System.out.println("You have found a " + droppedArtifact.getType() +" of quality :" + droppedArtifact.getQuality() + " !");
         }
     }
 
@@ -137,6 +152,7 @@ public class Hero {
                 if (this.hitPoints > this.maxHitPoints)
                     this.hitPoints = this.maxHitPoints;
                 System.out.println("You're now at " + this.hitPoints + " HP !");
+                generateArtifact(enemy.getLevel());
                 earnXp(enemy);
                 return true;
             }
@@ -152,5 +168,30 @@ public class Hero {
             }
         }
         return false;
+    }
+
+    public void save(){
+        File file = new File("src/main/java/ft/swingy/save/" + this.name + ".txt");
+        try {
+            file.createNewFile();
+        }
+        catch (Exception e) {
+            System.out.println("Error occurred while creating save file: " + e.getMessage());
+        }
+
+        try {
+            FileWriter writer = new FileWriter(file);
+            writer.write("Name:" + name + "\n");
+            writer.write("Type:" + type + "\n");
+            writer.write("Level:" + level + "\n");
+            writer.write("Experience:" + experience + "\n");
+            writer.write("Attack:" + attack + "\n");
+            writer.write("Defense:" + defense + "\n");
+            writer.write("HP:" + hitPoints + "\n");
+            writer.close();
+            System.out.println("Hero saved successfully!");
+        } catch (IOException e) {
+            System.out.println("Error occurred while saving stats: " + e.getMessage());
+        }
     }
 }

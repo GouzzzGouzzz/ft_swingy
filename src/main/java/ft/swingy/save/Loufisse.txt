@@ -1,0 +1,7 @@
+Name:Loufisse
+Type:Warrior
+Level:1
+Experience:0
+Attack:30
+Defense:25
+HP:100

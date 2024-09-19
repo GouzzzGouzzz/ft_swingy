@@ -19,10 +19,6 @@ public class ArtifactBuilder implements Builder {
         artifact.type = type;
     }
 
-    public void setTier(int tier) {
-        artifact.tier = tier;
-    }
-
     public Artifact getArtifact() {
         return artifact;
     }

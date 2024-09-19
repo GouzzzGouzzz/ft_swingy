@@ -34,9 +34,7 @@ public class FightScreen extends JPanel{
         fightBtn.setFocusable(false);
         runBtn.setFocusable(false);
         fightText.setFocusable(false);
-
         fightText.setText("You have encountered an enemy! - Run or Fight?");
-
 
         fightBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -51,6 +49,7 @@ public class FightScreen extends JPanel{
                 statsDisplay.updateStats();
             }
         });
+
         runBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 toggleVisibility();

@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 import ft.swingy.Artifacts.Artifact;
 import ft.swingy.Artifacts.ArtifactDirector;
 import ft.swingy.Game.GameMap;
+import ft.swingy.Game.HeroCreator;
 import ft.swingy.GameGUI.GameGUI;
 import ft.swingy.Hero.Hero;
 
@@ -18,11 +19,10 @@ public class Main
 {
     public static void main( String[] args )
     {
-        // HeroDirector director = new HeroDirector();
-        // HeroBuilder builder = new HeroBuilder();
-        // Hero war = director.makeWarrior(builder, "Loufisse");
-        // war.printStats();
-
+        Hero test = HeroCreator.createNewHero();
+        test.printStats();
+        GameMap map = new GameMap(13);
+        map.displayTerminal();
         // ArtifactDirector artifactDirector = new ArtifactDirector();
         // ArtifactBuilder artifactBuilder = new ArtifactBuilder();
         // Artifact art;
@@ -30,12 +30,12 @@ public class Main
         //     art = artifactDirector.makeT1(artifactBuilder);
         //     art.printStats();
         // }
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                GameMap map = new GameMap(13);
-                GameGUI game = new GameGUI(map, HeroDirector.makeWarrior(new HeroBuilder(), "Banger"));
-            }
-        });
+        // SwingUtilities.invokeLater(new Runnable() {
+        //     public void run() {
+                // GameMap map = new GameMap(13);
+                // GameGUI game = new GameGUI(map, HeroDirector.makeWarrior(new HeroBuilder(), "Banger"));
+        //     }
+        // });
 
     }
 }
