@@ -4,13 +4,13 @@ import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class GameMap {
-    int size;
+    public int size;
     int playerX;
     int playerY;
-    int[][] map;
+    public int[][] map;
 
-    public GameMap(int size) {
-        this.size = (size - 1) * 5 + 10;
+    public GameMap(int level) {
+        this.size = (level - 1) * 5 + 10 - (level % 2);
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
         map = new int[size][size];

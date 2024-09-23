@@ -1,6 +1,6 @@
 Name:asd
 Type:Rogue
-Level:1
+Level:10
 Experience:0
 Attack:75
 Defense:15
