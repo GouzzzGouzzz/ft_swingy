@@ -3,6 +3,7 @@ package ft.swingy.Hero;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Scanner;
 
 public class HeroDirector {
     public Hero makeWarrior(HeroBuilder builder, String name) {
@@ -30,7 +31,7 @@ public class HeroDirector {
     }
 
     public Hero loadFromFile(HeroBuilder builder, String name) {
-        File file = new File("src/main/java/ft/swingy/save/"+ name + ".txt");
+        File file = new File("src/main/java/ft/swingy/save/"+ name);
         String line;
 
         builder.reset();
@@ -78,5 +79,51 @@ public class HeroDirector {
         }
         System.out.println("Hero loaded successfully!");
         return builder.getHero();
+    }
+
+    static public Hero createNewHero(Scanner read){
+        final String[] heroType = {"Warrior", "Rogue"};
+        HeroDirector director = new HeroDirector();
+        HeroBuilder builder = new HeroBuilder();
+        String name = "";
+        int type = -1;
+
+        System.out.println("Enter your hero's name: ");
+        while (name == "" || type == -1) {
+            if (name == ""){
+                name = read.nextLine();
+                if (name.length() > 20) {
+                    System.out.println("Name too long, please enter a name with less than 20 characters");
+                    name = "";
+                    continue;
+                }
+            }
+            System.out.println("Type you're hero id class to choose one: \n1 " + heroType[0] + "\n2 " + heroType[1]);
+            if (type == -1){
+                try{
+                    type = read.nextInt();
+                    if (type < 1 || type > heroType.length){
+                        System.out.println("Invalid class, please enter a correct id\n1 " + heroType[0] + "\n2 " + heroType[1]);
+                        type = -1;
+                        throw new Exception();
+                    }
+                }
+                catch (Exception e){
+                    System.out.println("Invalid class, please enter a correct id\n1 " + heroType[0] + "\n2 " + heroType[1]);
+                    type = -1;
+                    read.nextLine();
+                    continue;
+                }
+            }
+        }
+        switch (type) {
+            case 1:
+                return director.makeWarrior(builder, name);
+            case 2:
+                return director.makeRogue(builder, name);
+            default:
+                break;
+        }
+        return null;
     }
 }

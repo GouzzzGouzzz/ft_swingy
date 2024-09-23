@@ -10,7 +10,7 @@ public class GameMap {
     int[][] map;
 
     public GameMap(int size) {
-        this.size = size;
+        this.size = (size - 1) * 5 + 10;
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
         map = new int[size][size];
@@ -25,10 +25,6 @@ public class GameMap {
             }
         }
         map[playerX][playerY] = ID.Player.getId();
-    }
-
-    public void displayTerminal(){
-        //display a 10x10 around the player
     }
 
     public int getAt(int x, int y) {

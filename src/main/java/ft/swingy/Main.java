@@ -10,8 +10,8 @@ import javax.swing.SwingUtilities;
 
 import ft.swingy.Artifacts.Artifact;
 import ft.swingy.Artifacts.ArtifactDirector;
+import ft.swingy.Game.Game;
 import ft.swingy.Game.GameMap;
-import ft.swingy.Game.HeroCreator;
 import ft.swingy.GameGUI.GameGUI;
 import ft.swingy.Hero.Hero;
 
@@ -19,10 +19,15 @@ public class Main
 {
     public static void main( String[] args )
     {
-        Hero test = HeroCreator.createNewHero();
-        test.printStats();
-        GameMap map = new GameMap(13);
-        map.displayTerminal();
+        Game game = new Game();
+        game.gameStart();
+
+        // Hero test = HeroCreator.createNewHero();
+        // test.printStats();
+        // test.save();
+
+        // GameMap map = new GameMap(13);
+        // map.displayTerminal();
         // ArtifactDirector artifactDirector = new ArtifactDirector();
         // ArtifactBuilder artifactBuilder = new ArtifactBuilder();
         // Artifact art;
