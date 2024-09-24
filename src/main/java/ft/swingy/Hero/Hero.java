@@ -171,7 +171,7 @@ public class Hero {
     }
 
     public void save(){
-        File file = new File("src/main/java/ft/swingy/save/" + this.name + ".txt");
+        File file = new File("src/main/java/ft/swingy/save/saves.txt");
         try {
             file.createNewFile();
         }
@@ -180,7 +180,7 @@ public class Hero {
         }
 
         try {
-            FileWriter writer = new FileWriter(file);
+            FileWriter writer = new FileWriter(file, true);
             writer.write("Name:" + name + "\n");
             writer.write("Type:" + type + "\n");
             writer.write("Level:" + level + "\n");

@@ -4,8 +4,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Scanner;
+import java.util.Set;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 public class HeroDirector {
+
     public Hero makeWarrior(HeroBuilder builder, String name) {
         builder.reset();
         builder.setType("Warrior");
@@ -30,54 +37,19 @@ public class HeroDirector {
         return builder.getHero();
     }
 
-    public Hero loadFromFile(HeroBuilder builder, String name) {
-        File file = new File("src/main/java/ft/swingy/save/"+ name);
+    static public Hero loadFromFile(HeroBuilder builder, int id) {
+        File file = new File("src/main/java/ft/swingy/save/saves.txt");
         String line;
 
         builder.reset();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            while ((line = reader.readLine()) != null) {
-                String [] info = line.split(":");
-                if (info.length != 2){
-                    System.out.println("Error: Invalid save file format");
-                    reader.close();
-                    return null;
-                }
-                switch (info[0]) {
-                    case "Name":
-                        builder.setName(info[1]);
-                        break;
-                    case "Type":
-                        builder.setType(info[1]);
-                        break;
-                    case "Level":
-                        builder.setLevel(Integer.parseInt(info[1]));
-                        break;
-                    case "Experience":
-                        builder.setExperience(Integer.parseInt(info[1]));
-                        break;
-                    case "Attack":
-                        builder.setAttack(Integer.parseInt(info[1]));
-                        break;
-                    case "Defense":
-                        builder.setDefense(Integer.parseInt(info[1]));
-                        break;
-                    case "HP":
-                        builder.setHP(Integer.parseInt(info[1]));
-                        break;
-                    default:
-                        System.out.println("Error: Invalid save file format");
-                        reader.close();
-                        return null;
-                }
-            }
-            reader.close();
+            BufferedReader fileReader = new BufferedReader(new FileReader(file));
+            while ((line = fileReader.readLine()) != null) {
+                //find the ID from Hero
         }
         catch (Exception e) {
             System.out.println("Error occurred while reading save file: " + e.getMessage());
         }
-        System.out.println("Hero loaded successfully!");
         return builder.getHero();
     }
 
@@ -85,42 +57,47 @@ public class HeroDirector {
         final String[] heroType = {"Warrior", "Rogue"};
         HeroDirector director = new HeroDirector();
         HeroBuilder builder = new HeroBuilder();
-        String name = "";
-        int type = -1;
+        HeroBean heroBean = new HeroBean();
 
-        System.out.println("Enter your hero's name: ");
-        while (name == "" || type == -1) {
-            if (name == ""){
-                name = read.nextLine();
-                if (name.length() > 20) {
-                    System.out.println("Name too long, please enter a name with less than 20 characters");
-                    name = "";
-                    continue;
-                }
+        Validator validator;
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+        Set<ConstraintViolation<HeroBean>> violations;
+
+        while (true){
+            System.out.println("Enter your hero's name: ");
+            heroBean.setName(read.nextLine());
+            violations = validator.validate(heroBean);
+            if (violations.isEmpty()) {
+                break;
             }
-            System.out.println("Type you're hero id class to choose one: \n1 " + heroType[0] + "\n2 " + heroType[1]);
-            if (type == -1){
-                try{
-                    type = read.nextInt();
-                    if (type < 1 || type > heroType.length){
-                        System.out.println("Invalid class, please enter a correct id\n1 " + heroType[0] + "\n2 " + heroType[1]);
-                        type = -1;
-                        throw new Exception();
-                    }
-                }
-                catch (Exception e){
-                    System.out.println("Invalid class, please enter a correct id\n1 " + heroType[0] + "\n2 " + heroType[1]);
-                    type = -1;
-                    read.nextLine();
-                    continue;
-                }
+            for (ConstraintViolation<HeroBean> violation : violations) {
+                System.out.println(violation.getMessage());
             }
         }
-        switch (type) {
+        while (true) {
+            System.out.println("Type you're hero id class to choose one: \n1 " + heroType[0] + "\n2 " + heroType[1]);
+            try{
+                heroBean.setType(read.nextInt());
+                violations = validator.validate(heroBean);
+                if (violations.isEmpty()) {
+                    break;
+                }
+                for (ConstraintViolation<HeroBean> violation : violations) {
+                    System.out.println(violation.getMessage());
+                }
+            }
+            catch (Exception e){
+                System.out.println("\nInvalid class, please enter a correct id");
+                read.nextLine();
+                continue;
+            }
+        }
+        switch (heroBean.getType()) {
             case 1:
-                return director.makeWarrior(builder, name);
+                return director.makeWarrior(builder, heroBean.getName());
             case 2:
-                return director.makeRogue(builder, name);
+                return director.makeRogue(builder, heroBean.getName());
             default:
                 break;
         }

@@ -1,7 +1,0 @@
-Name:asd
-Type:Rogue
-Level:10
-Experience:0
-Attack:75
-Defense:15
-HP:50
