@@ -18,7 +18,7 @@ public class Game {
     private Hero hero = null;
     Scanner read;
 
-    private void printHeroSaved(File savFile) {
+    private int printHeroSaved(File savFile) {
         int id = 0;
         try {
             BufferedReader fileReader = new BufferedReader(new FileReader(savFile));
@@ -33,9 +33,10 @@ public class Game {
         } catch (Exception e) {
             System.out.println("Error: Could not read save file");
         }
+        return id;
     }
 
-    private boolean loadHero() {
+    private int loadHero() {
         File saveFile = new File("src/main/java/ft/swingy/save/saves.txt");
         LoaderBean loader = new LoaderBean();
         HeroBuilder builder = new HeroBuilder();
@@ -45,7 +46,7 @@ public class Game {
         validator = factory.getValidator();
         Set<ConstraintViolation<LoaderBean>> violations;
         if (!saveFile.exists()) {
-            return false;
+            return -1;
         }
         while (true) {
             System.out.println("Do you want to load a hero ? (yes/no)");
@@ -60,11 +61,12 @@ public class Game {
             break;
         }
         if (loader.getloadChoice().equals("no")) {
-            return false;
+            return -1;
         }
+        int totalHeroFound;
         while (true) {
             System.out.println("Enter the ID of the hero you want to load :");
-            printHeroSaved(saveFile);
+            totalHeroFound = printHeroSaved(saveFile);
             loader.setID(read.nextInt());
             violations = validator.validate(loader);
             if (!violations.isEmpty()) {
@@ -73,13 +75,18 @@ public class Game {
                 }
                 continue;
             }
+            if (loader.getID() > totalHeroFound) {
+                System.out.println("Invalid ID, please enter a valid ID");
+                continue;
+            }
             hero = HeroDirector.loadFromFile(builder, loader.getID());
             if (hero == null) {
-                //probleme
-                break;
+                System.out.println("Error: Could not load hero, saved may be corrupted");
+                return 2;
             }
+            break;
         }
-        return true;
+        return 1;
     }
 
     private void printStatsAtIndex(int index){
@@ -141,16 +148,20 @@ public class Game {
         boolean exitGame = false;
         int turn;
 
-        if (loadHero() == false) {
+        int loadStatus = loadHero();
+        if (loadStatus == -1) {
             hero = HeroDirector.createNewHero(read);
             hero.save();
+        }
+        else if (loadStatus == 2) {
+            return;
         }
         System.out.println("Welcome " + hero.getName() + " the " + hero.getType() + " !\nThe game starts now !");
         GameMap gameMap = new GameMap(hero.getLevel());
         while (!exitGame) {
             printMapWithHeroStats(gameMap);
             // playerMove();
-
+            break;
 
         }
         read.close();

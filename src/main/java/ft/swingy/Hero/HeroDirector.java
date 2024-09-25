@@ -45,10 +45,40 @@ public class HeroDirector {
         try {
             BufferedReader fileReader = new BufferedReader(new FileReader(file));
             while ((line = fileReader.readLine()) != null) {
-                //find the ID from Hero
+                if (id == 0 && line.contains("Name:")){
+                    for (int i = 0; i < 7; i++){
+                        line = fileReader.readLine();
+                        if (line.contains("Name:")){
+                            builder.setName(line.substring(5));
+                        }
+                        if (line.contains("Type:")){
+                            builder.setType(line.substring(5));
+                        }
+                        if (line.contains("Level:")){
+                            builder.setLevel(Integer.parseInt(line.substring(6)));
+                        }
+                        if (line.contains("Experience:")){
+                            builder.setExperience(Integer.parseInt(line.substring(11)));
+                        }
+                        if (line.contains("Attack:")){
+                            builder.setAttack(Integer.parseInt(line.substring(8)));
+                        }
+                        if (line.contains("Defense:")){
+                            builder.setDefense(Integer.parseInt(line.substring(9)));
+                        }
+                        if (line.contains("HP:")){
+                            builder.setHP(Integer.parseInt(line.substring(4)));
+                        }
+                    }
+                }
+                if (line.contains("Name:")){
+                    id--;
+                }
+            }
+            fileReader.close();
         }
         catch (Exception e) {
-            System.out.println("Error occurred while reading save file: " + e.getMessage());
+            return null;
         }
         return builder.getHero();
     }
