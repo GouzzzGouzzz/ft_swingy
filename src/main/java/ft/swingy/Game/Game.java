@@ -81,7 +81,7 @@ public class Game {
             }
             hero = HeroDirector.loadFromFile(builder, loader.getID());
             if (hero == null) {
-                System.out.println("Error: Could not load hero, saved may be corrupted");
+                System.out.println("Error: Could not load hero, save may be corrupted");
                 return 2;
             }
             break;
@@ -104,7 +104,6 @@ public class Game {
     private void printMapWithHeroStats(GameMap map){
         final int renderDistance = 13;
         int startX = (map.size / 2) - renderDistance;
-        int startY = (map.size / 2) - renderDistance;
         int statsLine = 0;
         //https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
         final String ANSI_RESET = "\u001B[0m";
@@ -114,12 +113,10 @@ public class Game {
 
         if (startX < 0)
             startX = 0;
-        if (startY < 0)
-            startY = 0;
         for(int i = startX; i < map.size / 2 + renderDistance && i < map.size; i++){
-            for(int j = startY; j < map.size / 2 + renderDistance + 1 && j < map.size; j++){
+            for(int j = startX; j < map.size / 2 + renderDistance + 1 && j < map.size; j++){
                 if (map.map[i][j] == ID.Player.getId()){
-                    System.out.print(BLACK_BOLD_BRIGHT + ANSI_GREEN_BACKGROUND + "P"+ ANSI_RESET);
+                    System.out.print(BLACK_BOLD_BRIGHT + ANSI_GREEN_BACKGROUND + "P" + ANSI_RESET);
                 }
                 else if (map.map[i][j] == ID.Enemy.getId()){
                     System.out.print(ANSI_RED_TEXT + ANSI_GREEN_BACKGROUND + "X" + ANSI_RESET);
@@ -128,7 +125,7 @@ public class Game {
                     System.out.print(ANSI_GREEN_BACKGROUND + " " + ANSI_RESET);
                 }
             }
-            if (statsLine < 7 && i + 7 >= map.size / 2 + renderDistance){
+            if (statsLine < 7){
                 printStatsAtIndex(statsLine);
                 statsLine++;
             }
@@ -142,12 +139,12 @@ public class Game {
 
     //game loop
     public void gameStart() {
-        //find save if none create new hero
         read = new Scanner(System.in);
         boolean choiceArtifacts; //true take it, false leave it
         boolean exitGame = false;
         int turn;
 
+        //find save if none create new hero
         int loadStatus = loadHero();
         if (loadStatus == -1) {
             hero = HeroDirector.createNewHero(read);

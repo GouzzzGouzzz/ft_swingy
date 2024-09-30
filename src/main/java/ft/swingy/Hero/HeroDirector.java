@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.Scanner;
 import java.util.Set;
 
+import ft.swingy.Game.LoaderBean;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -40,6 +41,11 @@ public class HeroDirector {
     static public Hero loadFromFile(HeroBuilder builder, int id) {
         File file = new File("src/main/java/ft/swingy/save/saves.txt");
         String line;
+        BuilderBean bean = new BuilderBean();
+        Validator validator;
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+        Set<ConstraintViolation<BuilderBean>> violations;
 
         builder.reset();
         try {
@@ -47,29 +53,23 @@ public class HeroDirector {
             while ((line = fileReader.readLine()) != null) {
                 if (id == 0 && line.contains("Name:")){
                     for (int i = 0; i < 7; i++){
+                        if (line.contains("Name:"))
+                            bean.setName(line.substring(5));
+                        if (line.contains("Type:"))
+                            bean.setType(line.substring(5));
+                        if (line.contains("Level:"))
+                            bean.setLevel(Integer.parseInt(line.substring(6)));
+                        if (line.contains("Experience:"))
+                            bean.setExperience(Integer.parseInt(line.substring(11)));
+                        if (line.contains("Attack:"))
+                            bean.setAttack(Integer.parseInt(line.substring(7)));
+                        if (line.contains("Defense:"))
+                            bean.setDefense(Integer.parseInt(line.substring(8)));
+                        if (line.contains("HP:"))
+                            bean.setHP(Integer.parseInt(line.substring(3)));
                         line = fileReader.readLine();
-                        if (line.contains("Name:")){
-                            builder.setName(line.substring(5));
-                        }
-                        if (line.contains("Type:")){
-                            builder.setType(line.substring(5));
-                        }
-                        if (line.contains("Level:")){
-                            builder.setLevel(Integer.parseInt(line.substring(6)));
-                        }
-                        if (line.contains("Experience:")){
-                            builder.setExperience(Integer.parseInt(line.substring(11)));
-                        }
-                        if (line.contains("Attack:")){
-                            builder.setAttack(Integer.parseInt(line.substring(8)));
-                        }
-                        if (line.contains("Defense:")){
-                            builder.setDefense(Integer.parseInt(line.substring(9)));
-                        }
-                        if (line.contains("HP:")){
-                            builder.setHP(Integer.parseInt(line.substring(4)));
-                        }
                     }
+                    break;
                 }
                 if (line.contains("Name:")){
                     id--;
@@ -78,8 +78,23 @@ public class HeroDirector {
             fileReader.close();
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             return null;
         }
+        violations = validator.validate(bean);
+        if (!violations.isEmpty()) {
+            for (ConstraintViolation<BuilderBean> violation : violations) {
+                System.out.println(violation.getMessage());
+            }
+            return null;
+        }
+        builder.setName(bean.getName());
+        builder.setType(bean.getType());
+        builder.setLevel(bean.getLevel());
+        builder.setExperience(bean.getExperience());
+        builder.setAttack(bean.getAttack());
+        builder.setDefense(bean.getDefense());
+        builder.setHP(bean.getHP());
         return builder.getHero();
     }
 

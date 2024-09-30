@@ -18,7 +18,7 @@ public class GameMap {
         playerY = size / 2;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (random.nextInt(100) < 50)
+                if (random.nextInt(100) < 25)
                     map[i][j] = ID.Enemy.getId();
                 else
                     map[i][j] = ID.Empty.getId();
