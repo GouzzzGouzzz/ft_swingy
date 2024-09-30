@@ -131,11 +131,12 @@ public class Hero {
             return true;
         }
         System.out.println("You have failed to run away, you must fight !");
-        return fightSimulation(new Enemy(level));
+        return false;
     }
 
-    public boolean fightSimulation(Enemy enemy) {
+    public boolean fightSimulation() {
         Random random = new Random();
+        Enemy enemy = new Enemy(level);
         random.setSeed(System.currentTimeMillis());
 
         while (this.hitPoints > 0 && enemy.getHitPoints() > 0) {
@@ -161,7 +162,7 @@ public class Hero {
                 takeDamage(enemy.getAttack());
             }
             else
-            System.out.println("The enemy has missed his attack !");
+                System.out.println("The enemy has missed his attack !");
             if (this.hitPoints <= 0) {
                 System.out.println("You have been defeated by the enemy !");
                 return false;

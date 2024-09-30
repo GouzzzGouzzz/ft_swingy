@@ -39,7 +39,7 @@ public class FightScreen extends JPanel{
         fightBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 toggleVisibility();
-                if (hero.fightSimulation(new Enemy(hero.getLevel())) == false){
+                if (hero.fightSimulation() == false){
                     fightText.setText("You have been defeated !!!");
                     fightText.setVisible(true);
                     statsDisplay.updateStats();
@@ -49,7 +49,7 @@ public class FightScreen extends JPanel{
                 statsDisplay.updateStats();
             }
         });
-
+        //this is broken now
         runBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 toggleVisibility();

@@ -8,7 +8,7 @@ public class LoaderBean {
     @Min(value = 0, message = "ID must be a positive number")
     private int id = 0;
 
-    @Pattern(regexp = "yes|no", message = "You must enter 'yes' or 'no'")
+    @Pattern(regexp = "y|n", message = "You must enter 'y' or 'n'")
     private String loadChoice;
 
 

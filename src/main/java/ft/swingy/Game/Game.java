@@ -13,6 +13,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import java.awt.event.KeyEvent;
 
 public class Game {
     private Hero hero = null;
@@ -40,16 +41,17 @@ public class Game {
         File saveFile = new File("src/main/java/ft/swingy/save/saves.txt");
         LoaderBean loader = new LoaderBean();
         HeroBuilder builder = new HeroBuilder();
-
+        int totalHeroFound;
         Validator validator;
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
         Set<ConstraintViolation<LoaderBean>> violations;
+
         if (!saveFile.exists()) {
             return -1;
         }
         while (true) {
-            System.out.println("Do you want to load a hero ? (yes/no)");
+            System.out.println("Do you want to load a hero ? (y/n)");
             loader.setloadChoice(read.nextLine());
             violations = validator.validate(loader);
             if (!violations.isEmpty()) {
@@ -60,14 +62,13 @@ public class Game {
             }
             break;
         }
-        if (loader.getloadChoice().equals("no")) {
+        if (loader.getloadChoice().equals("n")) {
             return -1;
         }
-        int totalHeroFound;
         while (true) {
             System.out.println("Enter the ID of the hero you want to load :");
             totalHeroFound = printHeroSaved(saveFile);
-            loader.setID(read.nextInt());
+            loader.setID(Integer.parseInt(read.nextLine()));//break if not int
             violations = validator.validate(loader);
             if (!violations.isEmpty()) {
                 for (ConstraintViolation<LoaderBean> violation : violations) {
@@ -101,7 +102,7 @@ public class Game {
         System.out.print(stats[index]);
     }
 
-    private void printMapWithHeroStats(GameMap map){
+    private void printMapWithHeroStats(GameMap map, int turn){
         final int renderDistance = 13;
         int startX = (map.size / 2) - renderDistance;
         int statsLine = 0;
@@ -115,10 +116,10 @@ public class Game {
             startX = 0;
         for(int i = startX; i < map.size / 2 + renderDistance && i < map.size; i++){
             for(int j = startX; j < map.size / 2 + renderDistance + 1 && j < map.size; j++){
-                if (map.map[i][j] == ID.Player.getId()){
+                if (map.map[j][i] == ID.Player.getId()){
                     System.out.print(BLACK_BOLD_BRIGHT + ANSI_GREEN_BACKGROUND + "P" + ANSI_RESET);
                 }
-                else if (map.map[i][j] == ID.Enemy.getId()){
+                else if (map.map[j][i] == ID.Enemy.getId()){
                     System.out.print(ANSI_RED_TEXT + ANSI_GREEN_BACKGROUND + "X" + ANSI_RESET);
                 }
                 else{
@@ -129,23 +130,64 @@ public class Game {
                 printStatsAtIndex(statsLine);
                 statsLine++;
             }
+            else if (statsLine == 7){
+                System.out.print("    turn: " + turn);
+                statsLine++;
+            }
             System.out.println(ANSI_RESET);
         }
     }
 
-    // private void playerMove(){
+    private int playerInput(GameMap gameMap) {
+        String input;
+        int status = 0;
 
-    // }
+        while (true) {
+            System.out.println("Enter your move (w, a, s, d) or type 'exit' to quit the game (doesn t save) !");
+            input = read.nextLine();
+            System.out.print(input);
+            switch (input) {
+                case "w":
+                    status = gameMap.movePlayer(KeyEvent.VK_W);
+                    break;
+                case "s":
+                    status = gameMap.movePlayer(KeyEvent.VK_S);
+                    break;
+                case "d":
+                    status = gameMap.movePlayer(KeyEvent.VK_D);
+                    break;
+                case "a":
+                    status = gameMap.movePlayer(KeyEvent.VK_A);
+                    break;
+                case "exit":
+                    System.out.println("Goodbye !");
+                    return -1;
+                default:
+                    break;
+            }
+            if (status == 0) {
+                System.out.println("Invalid move, please enter a valid move !");
+                continue;
+            }
+            break;
+        }
+        return status;
+    }
 
     //game loop
     public void gameStart() {
         read = new Scanner(System.in);
-        boolean choiceArtifacts; //true take it, false leave it
-        boolean exitGame = false;
+        String yesNoChoice; //true take it, false leave it
+        boolean exitGame;
         int turn;
+        int moveStatus;
+        int loadStatus;
+        GameMap gameMap;
+        final String ANSI_CLEAR_SCREEN = "\033[H\033[2J";
 
-        //find save if none create new hero
-        int loadStatus = loadHero();
+        exitGame = false;
+        turn = 0;
+        loadStatus = loadHero();
         if (loadStatus == -1) {
             hero = HeroDirector.createNewHero(read);
             hero.save();
@@ -153,13 +195,51 @@ public class Game {
         else if (loadStatus == 2) {
             return;
         }
+        gameMap = new GameMap(hero.getLevel());
+        System.out.println(ANSI_CLEAR_SCREEN);
         System.out.println("Welcome " + hero.getName() + " the " + hero.getType() + " !\nThe game starts now !");
-        GameMap gameMap = new GameMap(hero.getLevel());
         while (!exitGame) {
-            printMapWithHeroStats(gameMap);
-            // playerMove();
-            break;
+            printMapWithHeroStats(gameMap, turn);
+            moveStatus = playerInput(gameMap);
 
+            if (moveStatus == -1)
+                break;
+            if (moveStatus == 2){
+                while (true) {
+                    System.out.println("You've encountered an enemy, do you want to fight ? (y/n)");
+                    yesNoChoice = read.nextLine();
+                    if (yesNoChoice.equals("y")) {
+                        if (hero.fightSimulation() == false) {
+                            System.out.println("You have been defeated !!!");
+                            // delete hero
+                            read.close();
+                            return;
+                        }
+                        System.out.println("You have defeated the enemy !");
+                        //artifact drop
+                        break;
+                    }
+                    else if (yesNoChoice.equals("n")) {
+                        if (hero.tryToRun() == false) {
+                            if (hero.fightSimulation() == false) {
+                                System.out.println("You have been defeated !!!");
+                                // delete hero
+                                read.close();
+                                return;
+                            }
+                            System.out.println("You have defeated the enemy !");
+                            //artifact drop
+                            break;
+                        }
+                        break;
+                    }
+                    else {
+                        System.out.println("Invalid choice, please enter a valid choice");
+                    }
+                }
+            }
+            turn++;
+            System.out.println(ANSI_CLEAR_SCREEN);
         }
         read.close();
     }
