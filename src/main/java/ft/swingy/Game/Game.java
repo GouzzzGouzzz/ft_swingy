@@ -68,7 +68,12 @@ public class Game {
         while (true) {
             System.out.println("Enter the ID of the hero you want to load :");
             totalHeroFound = printHeroSaved(saveFile);
-            loader.setID(Integer.parseInt(read.nextLine()));//break if not int
+            try {
+                loader.setID(Integer.parseInt(read.nextLine()));
+            } catch (Exception e) {
+                System.out.println("Invalid ID, please enter a valid ID");
+                continue;
+            }
             violations = validator.validate(loader);
             if (!violations.isEmpty()) {
                 for (ConstraintViolation<LoaderBean> violation : violations) {
