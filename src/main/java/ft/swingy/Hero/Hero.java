@@ -1,8 +1,12 @@
 package ft.swingy.Hero;
 
+import java.awt.List;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import ft.swingy.Artifacts.Artifact;
@@ -193,6 +197,46 @@ public class Hero {
             System.out.println("Hero saved successfully!");
         } catch (IOException e) {
             System.out.println("Error occurred while saving stats: " + e.getMessage());
+        }
+    }
+
+    public void deleteSave(){
+        File file = new File("src/main/java/ft/swingy/save/saves.txt");
+        ArrayList<String> lines = new ArrayList<String>();
+        String line;
+        int skip = -1;
+        try {
+            //buffer into the array
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            while((line = reader.readLine()) != null){
+                if (skip > 0){
+                    System.out.println("Skipped: " + line);
+                    skip--;
+                    continue;
+                }
+                if (line.contains(this.name)){
+                    System.out.println("Skipped: " + line);
+                    skip = 6;
+                    continue;
+                }
+                lines.add(line);
+            }
+            reader.close();
+        }
+        catch (Exception e) {
+            System.out.println("Error occurred while deleting hero from save: " + e.getMessage());
+        }
+        if (skip > 0){
+            System.out.println("Error: Reached EOF before deleting all mandatory lines, save file might be corrupted"); 
+        }
+        try {
+            FileWriter writer = new FileWriter(file);
+            for (int i = 0; i < lines.size(); i++){
+                System.out.println("Writing: " + lines.get(i));
+                writer.write(lines.get(i) + "\n");
+            }
+            writer.close();
+        } catch (Exception e) {
         }
     }
 }

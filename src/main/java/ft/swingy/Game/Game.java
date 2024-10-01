@@ -47,7 +47,7 @@ public class Game {
         validator = factory.getValidator();
         Set<ConstraintViolation<LoaderBean>> violations;
 
-        if (!saveFile.exists()) {
+        if (!saveFile.exists() || saveFile.length() == 0) {
             return -1;
         }
         while (true) {
@@ -70,7 +70,8 @@ public class Game {
             totalHeroFound = printHeroSaved(saveFile);
             try {
                 loader.setID(Integer.parseInt(read.nextLine()));
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 System.out.println("Invalid ID, please enter a valid ID");
                 continue;
             }
@@ -215,8 +216,7 @@ public class Game {
                     yesNoChoice = read.nextLine();
                     if (yesNoChoice.equals("y")) {
                         if (hero.fightSimulation() == false) {
-                            System.out.println("You have been defeated !!!");
-                            // delete hero
+                            hero.deleteSave();
                             read.close();
                             return;
                         }
@@ -227,8 +227,7 @@ public class Game {
                     else if (yesNoChoice.equals("n")) {
                         if (hero.tryToRun() == false) {
                             if (hero.fightSimulation() == false) {
-                                System.out.println("You have been defeated !!!");
-                                // delete hero
+                                hero.deleteSave();
                                 read.close();
                                 return;
                             }

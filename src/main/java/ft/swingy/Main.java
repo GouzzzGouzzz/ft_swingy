@@ -19,12 +19,20 @@ public class Main
 {
     public static void main( String[] args )
     {
-        Game game = new Game();
-        game.gameStart();
-
-        // Hero test = HeroCreator.createNewHero();
-        // test.printStats();
+        // Game game = new Game();
+        // game.gameStart();
+        // HeroBuilder builder = new HeroBuilder();
+        // HeroDirector director = new HeroDirector();
+        // Hero test = director.makeRogue(builder, "Banger");
         // test.save();
+        // test = director.makeRogue(builder, "asdd");
+        // test.save();
+        // test = director.makeRogue(builder, "loufisse");
+        // test.save();
+        // test = director.makeRogue(builder, "pdd");
+        // test.save();
+        // Hero test = HeroDirector.loadFromFile(builder, 1);
+        // test.deleteSave();
 
         // GameMap map = new GameMap(13);
         // map.displayTerminal();

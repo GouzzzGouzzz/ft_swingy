@@ -123,7 +123,7 @@ public class HeroDirector {
         while (true) {
             System.out.println("Type you're hero id class to choose one: \n1 " + heroType[0] + "\n2 " + heroType[1]);
             try{
-                heroBean.setType(read.nextInt());
+                heroBean.setType(Integer.parseInt(read.nextLine()));
                 violations = validator.validate(heroBean);
                 if (violations.isEmpty()) {
                     break;
