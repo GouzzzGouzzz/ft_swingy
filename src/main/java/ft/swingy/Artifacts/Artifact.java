@@ -6,9 +6,8 @@ public class Artifact {
 
     public Artifact(){};
 
-    public void printStats(){
-        System.out.println("Type: " + type);
-        System.out.println("Quality: " + quality);
+    public void printArtifact(){
+        System.out.println("You have found an " + type + " artifact of quality " + quality + " !");
     }
 
     public String getType() {

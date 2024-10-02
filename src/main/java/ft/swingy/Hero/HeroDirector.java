@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.util.Scanner;
 import java.util.Set;
 
-import ft.swingy.Game.LoaderBean;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

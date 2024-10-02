@@ -1,6 +1,5 @@
 package ft.swingy.Hero;
 
-import java.awt.List;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -10,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import ft.swingy.Artifacts.Artifact;
-import ft.swingy.Artifacts.ArtifactBuilder;
-import ft.swingy.Artifacts.ArtifactDirector;
 import ft.swingy.Enemy.Enemy;
 
 public class Hero {
@@ -68,16 +65,28 @@ public class Hero {
     public void equipArtifact(Artifact artifact) {
         switch (artifact.getType()) {
             case "Weapon":
-                this.attack += artifact.getQuality();
-                this.artifacts[0] = artifact;
+                if (this.artifacts[0] != null)
+                    this.attack -= this.artifacts[0].getQuality();
+                else{
+                    this.attack += artifact.getQuality();
+                    this.artifacts[0] = artifact;
+                }
                 break;
             case "Armor":
-                this.defense += artifact.getQuality();
-                this.artifacts[1] = artifact;
+                if (this.artifacts[1] != null)
+                    this.defense -= this.artifacts[1].getQuality();
+                else{
+                    this.defense += artifact.getQuality();
+                    this.artifacts[1] = artifact;
+                }
                 break;
             case "Helm":
-                this.hitPoints += artifact.getQuality();
-                this.artifacts[2] = artifact;
+                if (this.artifacts[2] != null)
+                    this.hitPoints -= this.artifacts[2].getQuality();
+                else{
+                    this.hitPoints += artifact.getQuality();
+                    this.artifacts[2] = artifact;
+                }
                 break;
             default:
                 break;
@@ -100,18 +109,6 @@ public class Hero {
         //the power of 2 "ˆ2" is done by doing "x * x"
         if (this.experience >= this.level * 1000 + (this.level - 1) * (this.level - 1) * 450 && this.level < 100) {
             levelUp();
-        }
-    }
-
-    private void generateArtifact(int level) {
-        Random random = new Random();
-        random.setSeed(System.currentTimeMillis());
-        Artifact droppedArtifact;
-        ArtifactDirector director = new ArtifactDirector();
-
-        if (random.nextInt(100) <= 10){
-            droppedArtifact = director.randomArtifacts(new ArtifactBuilder(), level);
-            System.out.println("You have found a " + droppedArtifact.getType() +" of quality :" + droppedArtifact.getQuality() + " !");
         }
     }
 
@@ -157,7 +154,6 @@ public class Hero {
                 if (this.hitPoints > this.maxHitPoints)
                     this.hitPoints = this.maxHitPoints;
                 System.out.println("You're now at " + this.hitPoints + " HP !");
-                generateArtifact(enemy.getLevel());
                 earnXp(enemy);
                 return true;
             }
@@ -206,7 +202,6 @@ public class Hero {
         String line;
         int skip = -1;
         try {
-            //buffer into the array
             BufferedReader reader = new BufferedReader(new FileReader(file));
             while((line = reader.readLine()) != null){
                 if (skip > 0){
@@ -227,7 +222,7 @@ public class Hero {
             System.out.println("Error occurred while deleting hero from save: " + e.getMessage());
         }
         if (skip > 0){
-            System.out.println("Error: Reached EOF before deleting all mandatory lines, save file might be corrupted"); 
+            System.out.println("Error: Reached EOF before deleting all mandatory lines, save file might be corrupted");
         }
         try {
             FileWriter writer = new FileWriter(file);

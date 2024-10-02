@@ -3,9 +3,9 @@ package ft.swingy.Artifacts;
 import java.util.Random;
 
 public class ArtifactDirector {
-    private final String[] types = {"Weapon", "Armor", "Helm"};
+    private static final String[] types = {"Weapon", "Armor", "Helm"};
 
-    public Artifact randomArtifacts(ArtifactBuilder builder, int level){
+    public static Artifact randomArtifacts(ArtifactBuilder builder, int level){
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
         int type = (int)(Math.random() * 3);
@@ -13,5 +13,15 @@ public class ArtifactDirector {
         builder.setType(types[type]);
         builder.setQuality((int)(random.nextInt(1, level * 10 + 50)));
         return builder.getArtifact();
+    }
+
+    public static Artifact dropRandomArtifact(int level){
+        ArtifactBuilder builder = new ArtifactBuilder();
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+
+        if (random.nextInt(1, 100) > 10)
+            return null;
+        return randomArtifacts(builder, level);
     }
 }

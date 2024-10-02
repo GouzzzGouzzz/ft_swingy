@@ -13,7 +13,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
-import java.awt.event.KeyEvent;
 
 public class Game {
     private Hero hero = null;
@@ -50,21 +49,11 @@ public class Game {
         if (!saveFile.exists() || saveFile.length() == 0) {
             return -1;
         }
-        while (true) {
-            System.out.println("Do you want to load a hero ? (y/n)");
-            loader.setloadChoice(read.nextLine());
-            violations = validator.validate(loader);
-            if (!violations.isEmpty()) {
-                for (ConstraintViolation<LoaderBean> violation : violations) {
-                    System.out.println(violation.getMessage());
-                }
-                continue;
-            }
-            break;
-        }
-        if (loader.getloadChoice().equals("n")) {
+
+        if(UserInput.askYesOrNo(read, "Do you want to load a hero ? (y/n)") == false){
             return -1;
         }
+
         while (true) {
             System.out.println("Enter the ID of the hero you want to load :");
             totalHeroFound = printHeroSaved(saveFile);
@@ -144,46 +133,8 @@ public class Game {
         }
     }
 
-    private int playerInput(GameMap gameMap) {
-        String input;
-        int status = 0;
-
-        while (true) {
-            System.out.println("Enter your move (w, a, s, d) or type 'exit' to quit the game (doesn t save) !");
-            input = read.nextLine();
-            System.out.print(input);
-            switch (input) {
-                case "w":
-                    status = gameMap.movePlayer(KeyEvent.VK_W);
-                    break;
-                case "s":
-                    status = gameMap.movePlayer(KeyEvent.VK_S);
-                    break;
-                case "d":
-                    status = gameMap.movePlayer(KeyEvent.VK_D);
-                    break;
-                case "a":
-                    status = gameMap.movePlayer(KeyEvent.VK_A);
-                    break;
-                case "exit":
-                    System.out.println("Goodbye !");
-                    return -1;
-                default:
-                    break;
-            }
-            if (status == 0) {
-                System.out.println("Invalid move, please enter a valid move !");
-                continue;
-            }
-            break;
-        }
-        return status;
-    }
-
-    //game loop
     public void gameStart() {
         read = new Scanner(System.in);
-        String yesNoChoice; //true take it, false leave it
         boolean exitGame;
         int turn;
         int moveStatus;
@@ -206,42 +157,15 @@ public class Game {
         System.out.println("Welcome " + hero.getName() + " the " + hero.getType() + " !\nThe game starts now !");
         while (!exitGame) {
             printMapWithHeroStats(gameMap, turn);
-            moveStatus = playerInput(gameMap);
-
+            moveStatus = UserInput.playerMoveInput(read, gameMap);
             if (moveStatus == -1)
                 break;
             if (moveStatus == 2){
-                while (true) {
-                    System.out.println("You've encountered an enemy, do you want to fight ? (y/n)");
-                    yesNoChoice = read.nextLine();
-                    if (yesNoChoice.equals("y")) {
-                        if (hero.fightSimulation() == false) {
-                            hero.deleteSave();
-                            read.close();
-                            return;
-                        }
-                        System.out.println("You have defeated the enemy !");
-                        //artifact drop
-                        break;
-                    }
-                    else if (yesNoChoice.equals("n")) {
-                        if (hero.tryToRun() == false) {
-                            if (hero.fightSimulation() == false) {
-                                hero.deleteSave();
-                                read.close();
-                                return;
-                            }
-                            System.out.println("You have defeated the enemy !");
-                            //artifact drop
-                            break;
-                        }
-                        break;
-                    }
-                    else {
-                        System.out.println("Invalid choice, please enter a valid choice");
-                    }
-                }
+                if (UserInput.enemyEncounter(read, hero) == false)
+                    break;
             }
+            //si player a gagné
+            // save et relance
             turn++;
             System.out.println(ANSI_CLEAR_SCREEN);
         }
