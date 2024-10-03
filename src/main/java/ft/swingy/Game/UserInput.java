@@ -29,9 +29,10 @@ public class UserInput {
     public static void takeArtifactsInput(Hero hero, Artifact artifactDrop, Scanner read) {
         boolean choice;
         while (true) {
-            choice = askYesOrNo(read, "Do you want to take the artifact ? (y/n)")
+            choice = askYesOrNo(read, "Do you want to take the artifact ? (y/n)");
             if (choice == true) {
                 hero.equipArtifact(artifactDrop);
+                break;
             }
             else {
                 break;
@@ -87,8 +88,10 @@ public class UserInput {
                     read.close();
                     return false;
                 }
-                System.out.println("You have defeated the enemy !");
                 artifactDrop = ArtifactDirector.dropRandomArtifact(hero.getLevel());
+                if (artifactDrop == null) {
+                    break;
+                }
                 artifactDrop.printArtifact();
                 UserInput.takeArtifactsInput(hero, artifactDrop, read);
                 break;
@@ -100,7 +103,6 @@ public class UserInput {
                         read.close();
                         return false;
                     }
-                    System.out.println("You have defeated the enemy !");
                     artifactDrop = ArtifactDirector.dropRandomArtifact(hero.getLevel());
                     artifactDrop.printArtifact();
                     UserInput.takeArtifactsInput(hero, artifactDrop, read);
@@ -111,4 +113,5 @@ public class UserInput {
         }
         return true;
     }
+
 }

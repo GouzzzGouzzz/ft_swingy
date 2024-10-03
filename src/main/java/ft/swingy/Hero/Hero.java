@@ -93,6 +93,10 @@ public class Hero {
         }
     }
 
+    public void regenerate(){
+        this.hitPoints = this.maxHitPoints;
+    }
+
     private void levelUp() {
         this.level++;
         this.attack += 15;
@@ -118,9 +122,12 @@ public class Hero {
             damage = 0;
             System.out.println("Your defense is too high, the enemy can't damage you !!!");
         }
-        else
-            System.out.println("You have taken " + damage + " damage.       remaing health (You) : " + (this.hitPoints - damage) + "!");
-        this.hitPoints -= damage;
+        else{
+            this.hitPoints -= damage;
+            if (this.hitPoints < 0)
+                this.hitPoints = 0;
+            System.out.println("You have taken " + damage + " damage.       remaing health (You) : " + (this.hitPoints) + "!");
+        }
     }
 
     public boolean tryToRun() {
@@ -190,7 +197,6 @@ public class Hero {
             writer.write("Defense:" + defense + "\n");
             writer.write("HP:" + hitPoints + "\n");
             writer.close();
-            System.out.println("Hero saved successfully!");
         } catch (IOException e) {
             System.out.println("Error occurred while saving stats: " + e.getMessage());
         }
@@ -201,16 +207,15 @@ public class Hero {
         ArrayList<String> lines = new ArrayList<String>();
         String line;
         int skip = -1;
+
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             while((line = reader.readLine()) != null){
                 if (skip > 0){
-                    System.out.println("Skipped: " + line);
                     skip--;
                     continue;
                 }
                 if (line.contains(this.name)){
-                    System.out.println("Skipped: " + line);
                     skip = 6;
                     continue;
                 }
@@ -222,12 +227,11 @@ public class Hero {
             System.out.println("Error occurred while deleting hero from save: " + e.getMessage());
         }
         if (skip > 0){
-            System.out.println("Error: Reached EOF before deleting all mandatory lines, save file might be corrupted");
+            System.out.println("Potential Error: Reached EOF before deleting all mandatory lines, save file might be corrupted");
         }
         try {
             FileWriter writer = new FileWriter(file);
             for (int i = 0; i < lines.size(); i++){
-                System.out.println("Writing: " + lines.get(i));
                 writer.write(lines.get(i) + "\n");
             }
             writer.close();

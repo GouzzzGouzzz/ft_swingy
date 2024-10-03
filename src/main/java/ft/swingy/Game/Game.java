@@ -99,7 +99,8 @@ public class Game {
 
     private void printMapWithHeroStats(GameMap map, int turn){
         final int renderDistance = 13;
-        int startX = (map.size / 2) - renderDistance;
+        int startX = map.playerX - renderDistance;
+        int startY = map.playerY - renderDistance;
         int statsLine = 0;
         //https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
         final String ANSI_RESET = "\u001B[0m";
@@ -109,8 +110,10 @@ public class Game {
 
         if (startX < 0)
             startX = 0;
-        for(int i = startX; i < map.size / 2 + renderDistance && i < map.size; i++){
-            for(int j = startX; j < map.size / 2 + renderDistance + 1 && j < map.size; j++){
+        if (startY < 0)
+            startY = 0;
+        for(int i = startY; i < map.playerY + renderDistance && i < map.size; i++){
+            for(int j = startX; j < map.playerX + renderDistance + 1 && j < map.size; j++){
                 if (map.map[j][i] == ID.Player.getId()){
                     System.out.print(BLACK_BOLD_BRIGHT + ANSI_GREEN_BACKGROUND + "P" + ANSI_RESET);
                 }
@@ -139,6 +142,7 @@ public class Game {
         int turn;
         int moveStatus;
         int loadStatus;
+        boolean gameStatus;
         GameMap gameMap;
         final String ANSI_CLEAR_SCREEN = "\033[H\033[2J";
 
@@ -158,16 +162,29 @@ public class Game {
         while (!exitGame) {
             printMapWithHeroStats(gameMap, turn);
             moveStatus = UserInput.playerMoveInput(read, gameMap);
+            turn++;
             if (moveStatus == -1)
                 break;
             if (moveStatus == 2){
                 if (UserInput.enemyEncounter(read, hero) == false)
                     break;
             }
-            //si player a gagné
-            // save et relance
-            turn++;
-            System.out.println(ANSI_CLEAR_SCREEN);
+            if (gameMap.playerReachedEdge()){
+                System.out.println(ANSI_CLEAR_SCREEN);
+                printMapWithHeroStats(gameMap, turn);
+                hero.regenerate();
+                hero.save();
+                System.out.println("You reached the edge of the map, you won ! (You're character has been saved)");
+                gameStatus = UserInput.askYesOrNo(read, "Do you want to continue  ? (y/n)");
+                if (gameStatus == false)
+                    exitGame = true;
+                else {
+                    System.out.println("You've been teleported to a new map !");
+                    gameMap = new GameMap(hero.getLevel());
+                    turn = 0;
+                }
+            }
+            // System.out.println(ANSI_CLEAR_SCREEN);
         }
         read.close();
     }

@@ -88,4 +88,10 @@ public class GameMap {
         }
         return 0;
     }
+
+    public boolean playerReachedEdge() {
+        if (playerX == 0 || playerX == size - 1 || playerY == 0 || playerY == size - 1)
+            return true;
+        return false;
+    }
 }

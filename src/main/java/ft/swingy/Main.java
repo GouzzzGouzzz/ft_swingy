@@ -19,8 +19,8 @@ public class Main
 {
     public static void main( String[] args )
     {
-        // Game game = new Game();
-        // game.gameStart();
+        Game game = new Game();
+        game.gameStart();
         // HeroBuilder builder = new HeroBuilder();
         // HeroDirector director = new HeroDirector();
         // Hero test = director.makeRogue(builder, "Banger");

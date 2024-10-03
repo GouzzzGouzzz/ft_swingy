@@ -52,8 +52,12 @@ public class Enemy {
             damage = 0;
             System.out.println("The enemy's defense is too high, you can't damage it !!!");
         }
-        else
+        else{
+            this.hitPoints -= damage;
+            if (this.hitPoints <= 0)
+                this.hitPoints = 0;
             System.out.println("The enemy has taken " + damage + " damage.  remaing health (Mob) : " + (this.hitPoints - damage) + "!");
+        }
         this.hitPoints -= damage;
     }
 }
