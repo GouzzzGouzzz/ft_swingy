@@ -117,7 +117,6 @@ public class HeroDirector {
     }
 
     static public Hero createNewHero(Scanner read){
-        final String[] heroType = {"Warrior", "Rogue"};
         HeroDirector director = new HeroDirector();
         HeroBuilder builder = new HeroBuilder();
         HeroBean heroBean = new HeroBean();
