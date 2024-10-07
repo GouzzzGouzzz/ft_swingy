@@ -178,27 +178,70 @@ public class Hero {
         return false;
     }
 
+    private void addStatsToList(ArrayList<String> lines){
+        lines.add("Name:" + name);
+        lines.add("Type:" + type);
+        lines.add("Level:" + level);
+        lines.add("Experience:" + experience);
+        lines.add("Attack:" + attack);
+        lines.add("Defense:" + defense);
+        lines.add("HP:" + hitPoints);
+        if (artifacts[0] != null)
+            lines.add("Weapon:" + artifacts[0].getQuality());
+        else
+            lines.add("Weapon:0");
+        if (artifacts[1] != null)
+            lines.add("Armor:" + artifacts[1].getQuality());
+        else
+            lines.add("Armor:0");
+        if (artifacts[2] != null)
+            lines.add("Helm:" + artifacts[2].getQuality());
+        else
+            lines.add("Helm:0");
+    }
+
     public void save(){
         File file = new File("src/main/java/ft/swingy/save/saves.txt");
+        ArrayList<String> lines = new ArrayList<String>();
+        String line;
+        int skip;
+
+        skip = -1;
         try {
             file.createNewFile();
         }
         catch (Exception e) {
             System.out.println("Error occurred while creating save file: " + e.getMessage());
         }
-
         try {
-            FileWriter writer = new FileWriter(file, true);
-            writer.write("Name:" + name + "\n");
-            writer.write("Type:" + type + "\n");
-            writer.write("Level:" + level + "\n");
-            writer.write("Experience:" + experience + "\n");
-            writer.write("Attack:" + attack + "\n");
-            writer.write("Defense:" + defense + "\n");
-            writer.write("HP:" + hitPoints + "\n");
-            writer.close();
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            while ((line = reader.readLine()) != null){
+                System.out.println("Save Read : " + line);
+                if (skip > 0){
+                    skip--;
+                    continue;
+                }
+                if (line.contains(this.name) && skip == -1){
+                    skip = 9;
+                    addStatsToList(lines);
+                }
+                else
+                    lines.add(line);
+            }
+            reader.close();
         } catch (IOException e) {
             System.out.println("Error occurred while saving stats: " + e.getMessage());
+        }
+        if (skip == -1) // new hero
+            addStatsToList(lines);
+        try {
+            FileWriter writer = new FileWriter(file);
+            for (int i = 0; i < lines.size(); i++){
+                System.out.println("Save write : " + lines.get(i));
+                writer.write(lines.get(i) + "\n");
+            }
+            writer.close();
+        } catch (Exception e) {
         }
     }
 
@@ -215,8 +258,8 @@ public class Hero {
                     skip--;
                     continue;
                 }
-                if (line.contains(this.name)){
-                    skip = 6;
+                if (line.contains(this.name) && skip == -1){
+                    skip = 9;
                     continue;
                 }
                 lines.add(line);

@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.Scanner;
 import java.util.Set;
 
+import ft.swingy.Artifacts.ArtifactBean;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -40,32 +41,40 @@ public class HeroDirector {
     static public Hero loadFromFile(HeroBuilder builder, int id) {
         File file = new File("src/main/java/ft/swingy/save/saves.txt");
         String line;
-        BuilderBean bean = new BuilderBean();
+        BuilderBean builderB = new BuilderBean();
+        ArtifactBean artifactB = new ArtifactBean();
         Validator validator;
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
-        Set<ConstraintViolation<BuilderBean>> violations;
-
+        Set<ConstraintViolation<BuilderBean>> violationsBuilder;
+        Set<ConstraintViolation<ArtifactBean>> violationsArtifact;
         builder.reset();
+
         try {
             BufferedReader fileReader = new BufferedReader(new FileReader(file));
             while ((line = fileReader.readLine()) != null) {
                 if (id == 0 && line.contains("Name:")){
-                    for (int i = 0; i < 7; i++){
+                    for (int i = 0; i < 10; i++){
                         if (line.contains("Name:"))
-                            bean.setName(line.substring(5));
+                            builderB.setName(line.substring(5));
                         if (line.contains("Type:"))
-                            bean.setType(line.substring(5));
+                            builderB.setType(line.substring(5));
                         if (line.contains("Level:"))
-                            bean.setLevel(Integer.parseInt(line.substring(6)));
+                            builderB.setLevel(Integer.parseInt(line.substring(6)));
                         if (line.contains("Experience:"))
-                            bean.setExperience(Integer.parseInt(line.substring(11)));
+                            builderB.setExperience(Integer.parseInt(line.substring(11)));
                         if (line.contains("Attack:"))
-                            bean.setAttack(Integer.parseInt(line.substring(7)));
+                            builderB.setAttack(Integer.parseInt(line.substring(7)));
                         if (line.contains("Defense:"))
-                            bean.setDefense(Integer.parseInt(line.substring(8)));
+                            builderB.setDefense(Integer.parseInt(line.substring(8)));
                         if (line.contains("HP:"))
-                            bean.setHP(Integer.parseInt(line.substring(3)));
+                            builderB.setHP(Integer.parseInt(line.substring(3)));
+                        if (line.contains("Weapon:"))
+                            artifactB.setWeapon(Integer.parseInt(line.substring(7)));
+                        if (line.contains("Armor:"))
+                            artifactB.setArmor(Integer.parseInt(line.substring(6)));
+                        if (line.contains("Helm:"))
+                            artifactB.setHelm(Integer.parseInt(line.substring(5)));
                         line = fileReader.readLine();
                     }
                     break;
@@ -80,20 +89,30 @@ public class HeroDirector {
             System.out.println(e.getMessage());
             return null;
         }
-        violations = validator.validate(bean);
-        if (!violations.isEmpty()) {
-            for (ConstraintViolation<BuilderBean> violation : violations) {
+        violationsBuilder = validator.validate(builderB);
+        if (!violationsBuilder.isEmpty()) {
+            for (ConstraintViolation<BuilderBean> violation : violationsBuilder) {
                 System.out.println(violation.getMessage());
             }
             return null;
         }
-        builder.setName(bean.getName());
-        builder.setType(bean.getType());
-        builder.setLevel(bean.getLevel());
-        builder.setExperience(bean.getExperience());
-        builder.setAttack(bean.getAttack());
-        builder.setDefense(bean.getDefense());
-        builder.setHP(bean.getHP());
+        violationsArtifact = validator.validate(artifactB);
+        if (!violationsArtifact.isEmpty()) {
+            for (ConstraintViolation<ArtifactBean> violation : violationsArtifact) {
+                System.out.println(violation.getMessage());
+            }
+            return null;
+        }
+        builder.setName(builderB.getName());
+        builder.setType(builderB.getType());
+        builder.setLevel(builderB.getLevel());
+        builder.setExperience(builderB.getExperience());
+        builder.setAttack(builderB.getAttack());
+        builder.setDefense(builderB.getDefense());
+        builder.setHP(builderB.getHP());
+        builder.setWeapon(artifactB.getWeapon());
+        builder.setArmor(artifactB.getArmor());
+        builder.setHelm(artifactB.getHelm());
         return builder.getHero();
     }
 
@@ -120,7 +139,9 @@ public class HeroDirector {
             }
         }
         while (true) {
-            System.out.println("Type you're hero id class to choose one: \n1 " + heroType[0] + "\n2 " + heroType[1]);
+            System.out.println("Type you're hero id class to choose one:");
+            System.out.println("1. Warrior (Attack: 30, Defense: 25, HP: 100)");
+            System.out.println("2. Rogue (Attack: 75, Defense: 15, HP: 50)");
             try{
                 heroBean.setType(Integer.parseInt(read.nextLine()));
                 violations = validator.validate(heroBean);

@@ -28,4 +28,17 @@ public class HeroBean {
         return name;
     }
 
+    public void setWeapon(int quality) {
+        // hero.artifacts[0] = weapon;
+    }
+
+    public void setArmor(int quality) {
+        // hero.artifacts[1] = armor;
+    }
+
+    public void setHelm(int quality) {
+        // ArtifactDirector director = new ArtifactDirector();
+        // hero.artifacts[2] = director.buildWithQuality("Helm", quality);
+    }
+    
 }

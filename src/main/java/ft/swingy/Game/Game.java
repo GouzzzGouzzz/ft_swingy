@@ -18,6 +18,16 @@ public class Game {
     private Hero hero = null;
     Scanner read;
 
+    private void printHeroStats(BufferedReader reader) {
+        for (int i = 0; i < 9; i++) {
+            try {
+                System.out.println("   |" + reader.readLine());
+            } catch (Exception e) {
+                System.out.println("Error: Could not read save file");
+            }
+        }
+    }
+
     private int printHeroSaved(File savFile) {
         int id = 0;
         try {
@@ -26,6 +36,7 @@ public class Game {
             while ((line = fileReader.readLine()) != null) {
                 if (line.contains("Name:")){
                     System.out.println(id + " | " + line.substring(5));
+                    printHeroStats(fileReader);
                     id++;
                 }
             }

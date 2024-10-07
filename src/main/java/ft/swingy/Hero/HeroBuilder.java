@@ -1,6 +1,8 @@
 package ft.swingy.Hero;
 
 import ft.swingy.Artifacts.Artifact;
+import ft.swingy.Artifacts.ArtifactBuilder;
+import ft.swingy.Artifacts.ArtifactDirector;
 
 public class HeroBuilder implements Builder {
     private Hero hero;
@@ -40,5 +42,23 @@ public class HeroBuilder implements Builder {
     }
     public Hero getHero() {
         return hero;
+    }
+
+    public void setWeapon(int quality) {
+        ArtifactDirector director = new ArtifactDirector();
+        ArtifactBuilder builder = new ArtifactBuilder();
+        hero.artifacts[0] = director.buildWithQuality(builder ,"Weapon", quality);
+    }
+
+    public void setArmor(int quality) {
+        ArtifactDirector director = new ArtifactDirector();
+        ArtifactBuilder builder = new ArtifactBuilder();
+        hero.artifacts[1] = director.buildWithQuality(builder ,"Armor", quality);
+    }
+
+    public void setHelm(int quality) {
+        ArtifactDirector director = new ArtifactDirector();
+        ArtifactBuilder builder = new ArtifactBuilder();
+        hero.artifacts[2] = director.buildWithQuality(builder ,"Helm", quality);
     }
 }

@@ -24,4 +24,11 @@ public class ArtifactDirector {
             return null;
         return randomArtifacts(builder, level);
     }
+
+    public Artifact buildWithQuality(ArtifactBuilder builder, String type, int quality){
+        builder.reset();
+        builder.setType(type);
+        builder.setQuality(quality);
+        return builder.getArtifact();
+    }
 }
