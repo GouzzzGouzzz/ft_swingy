@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import ft.swingy.Game.ID;
-import ft.swingy.Game.GameMap;
+import ft.swingy.Game.GameMapModel;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -22,12 +22,12 @@ public class Board extends JPanel{
     private int playerX;
     private int playerY;
     private int mapTileSize;
-    private GameMap map;
+    private GameMapModel map;
     private boolean init;
     public boolean inFight;
     private GameGUI gameGUI;
 
-    public Board(GameMap map, GameGUI gameGUI) {
+    public Board(GameMapModel map, GameGUI gameGUI) {
         this.map = map;
         this.gameGUI = gameGUI;
         mapTileSize = map.getSize() * 32;
@@ -53,28 +53,28 @@ public class Board extends JPanel{
                     return ;
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W:
-                        status = map.movePlayer(KeyEvent.VK_W);
+                        // status = map.movePlayer(KeyEvent.VK_W);
                         if (status > 0)
                             movePlayer(KeyEvent.VK_W);
                         break;
                     case KeyEvent.VK_S:
-                        status = map.movePlayer(KeyEvent.VK_S);
+                        // status = map.movePlayer(KeyEvent.VK_S);
                         if (status > 0)
                             movePlayer(KeyEvent.VK_S);
                         break;
                     case KeyEvent.VK_A:
-                        status = map.movePlayer(KeyEvent.VK_A);
+                        // status = map.movePlayer(KeyEvent.VK_A);
                         if (status > 0)
                             movePlayer(KeyEvent.VK_A);
                         break;
                     case KeyEvent.VK_D:
-                        status = map.movePlayer(KeyEvent.VK_D);
+                        // status = map.movePlayer(KeyEvent.VK_D);
                         if (status > 0)
                             movePlayer(KeyEvent.VK_D);
                         break;
                 }
                 if (status == 2){
-                    gameGUI.toggleFightText();
+                    // gameGUI.toggleFightText();
                     inFight = true;
                 }
             }

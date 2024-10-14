@@ -14,7 +14,7 @@ public class Enemy {
         this.attack = 30 * level;
         this.defense = 10 * level;
         this.xp = level * 350 + (level - 1) * 250;
-        printStats();
+        // printStats();
     }
 
     private void printStats() {
@@ -50,13 +50,13 @@ public class Enemy {
         damage -= this.defense;
         if (damage <= 0) {
             damage = 0;
-            System.out.println("The enemy's defense is too high, you can't damage it !!!");
+            // System.out.println("The enemy's defense is too high, you can't damage it !!!");
         }
         else{
             this.hitPoints -= damage;
             if (this.hitPoints <= 0)
                 this.hitPoints = 0;
-            System.out.println("The enemy has taken " + damage + " damage.  remaing health (Mob) : " + (this.hitPoints - damage) + "!");
+            // System.out.println("The enemy has taken " + damage + " damage.  remaing health (Mob) : " + (this.hitPoints - damage) + "!");
         }
         this.hitPoints -= damage;
     }

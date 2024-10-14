@@ -1,15 +1,13 @@
 package ft.swingy.Game;
-
-import java.awt.event.KeyEvent;
 import java.util.Random;
 
-public class GameMap {
+public class GameMapModel {
     public int size;
     int playerX;
     int playerY;
     public int[][] map;
 
-    public GameMap(int level) {
+    public GameMapModel(int level) {
         this.size = (level - 1) * 5 + 10 - (level % 2);
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
@@ -35,58 +33,66 @@ public class GameMap {
         return size;
     }
 
-    public int movePlayer(int key) {
-        switch (key) {
-            case KeyEvent.VK_W:
+    public int getPlayerX() {
+        return playerX;
+    }
+
+    public int getPlayerY() {
+        return playerY;
+    }
+
+    public MoveResult movePlayer(Direction direction) {
+        switch (direction) {
+            case UP:
                 if (playerY - 1 >= 0){
                     map[playerX][playerY] = ID.Empty.getId();
                     playerY--;
                     if (map[playerX][playerY] == ID.Enemy.getId()){
                         map[playerX][playerY] = ID.Player.getId();
-                        return 2;
+                        return MoveResult.ENEMY_ENCOUNTER;
                     }
                     map[playerX][playerY] = ID.Player.getId();
-                    return 1;
+                    return MoveResult.VALID_MOVE;
                 }
                 break;
-            case KeyEvent.VK_S:
+            case DOWN:
                 if (playerY + 1 < size){
                     map[playerX][playerY] = ID.Empty.getId();
                     playerY++;
                     if (map[playerX][playerY] == ID.Enemy.getId()){
                         map[playerX][playerY] = ID.Player.getId();
-                        return 2;
+                        return MoveResult.ENEMY_ENCOUNTER;
                     }
                     map[playerX][playerY] = ID.Player.getId();
-                    return 1;
+                    return MoveResult.VALID_MOVE;
                 }
                 break;
-            case KeyEvent.VK_A:
+            case LEFT:
                 if (playerX - 1 >= 0){
                     map[playerX][playerY] = ID.Empty.getId();
                     playerX--;
                     if (map[playerX][playerY] == ID.Enemy.getId()){
                         map[playerX][playerY] = ID.Player.getId();
-                        return 2;
+                        return MoveResult.ENEMY_ENCOUNTER;
                     }
                     map[playerX][playerY] = ID.Player.getId();
-                    return 1;
+                    return MoveResult.VALID_MOVE;
                 }
                 break;
-            case KeyEvent.VK_D:
+            case RIGHT:
                 if (playerX + 1 < size){
                     map[playerX][playerY] = ID.Empty.getId();
                     playerX++;
                     if (map[playerX][playerY] == ID.Enemy.getId()){
                         map[playerX][playerY] = ID.Player.getId();
-                        return 2;
+                        return MoveResult.ENEMY_ENCOUNTER;
                     }
                     map[playerX][playerY] = ID.Player.getId();
-                    return 1;
+                    return MoveResult.VALID_MOVE;
                 }
                 break;
         }
-        return 0;
+        return MoveResult.INVALID_MOVE;
     }
 
     public boolean playerReachedEdge() {
