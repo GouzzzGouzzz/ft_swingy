@@ -3,7 +3,6 @@ package ft.swingy.Hero;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.Scanner;
 import java.util.Set;
 
 import ft.swingy.Artifacts.ArtifactBean;
@@ -12,7 +11,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
-public class HeroDirector {
+public class HeroDirectorModel {
 
     public Hero makeWarrior(HeroBuilder builder, String name) {
         builder.reset();
@@ -114,57 +113,5 @@ public class HeroDirector {
         builder.setArmor(artifactB.getArmor());
         builder.setHelm(artifactB.getHelm());
         return builder.getHero();
-    }
-
-    static public Hero createNewHero(Scanner read){
-        HeroDirector director = new HeroDirector();
-        HeroBuilder builder = new HeroBuilder();
-        HeroBean heroBean = new HeroBean();
-
-        Validator validator;
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
-        Set<ConstraintViolation<HeroBean>> violations;
-
-        while (true){
-            System.out.println("Enter your hero's name: ");
-            heroBean.setName(read.nextLine());
-            violations = validator.validate(heroBean);
-            if (violations.isEmpty()) {
-                break;
-            }
-            for (ConstraintViolation<HeroBean> violation : violations) {
-                System.out.println(violation.getMessage());
-            }
-        }
-        while (true) {
-            System.out.println("Type you're hero id class to choose one:");
-            System.out.println("1. Warrior (Attack: 30, Defense: 25, HP: 100)");
-            System.out.println("2. Rogue (Attack: 75, Defense: 15, HP: 50)");
-            try{
-                heroBean.setType(Integer.parseInt(read.nextLine()));
-                violations = validator.validate(heroBean);
-                if (violations.isEmpty()) {
-                    break;
-                }
-                for (ConstraintViolation<HeroBean> violation : violations) {
-                    System.out.println(violation.getMessage());
-                }
-            }
-            catch (Exception e){
-                System.out.println("\nInvalid class, please enter a correct id");
-                read.nextLine();
-                continue;
-            }
-        }
-        switch (heroBean.getType()) {
-            case 1:
-                return director.makeWarrior(builder, heroBean.getName());
-            case 2:
-                return director.makeRogue(builder, heroBean.getName());
-            default:
-                break;
-        }
-        return null;
     }
 }

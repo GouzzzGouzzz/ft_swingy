@@ -1,7 +1,7 @@
 package ft.swingy;
 
 import ft.swingy.Hero.HeroBuilder;
-import ft.swingy.Hero.HeroDirector;
+import ft.swingy.Hero.HeroDirectorModel;
 import ft.swingy.Terminal.GameController;
 import ft.swingy.Terminal.LoaderController;
 import ft.swingy.Terminal.LoaderView;

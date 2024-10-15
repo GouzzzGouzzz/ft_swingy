@@ -1,5 +1,7 @@
 package ft.swingy.Game;
 
+import java.util.ArrayList;
+
 import ft.swingy.Artifacts.Artifact;
 import ft.swingy.Artifacts.ArtifactDirector;
 import ft.swingy.Hero.Hero;
@@ -57,6 +59,10 @@ public class GameModel {
 
     public void resetArtifact() {
         dropArtifact = null;
+    }
+
+    public ArrayList<String> getCombatLogs() {
+        return hero.getCombatLogs();
     }
 
     public Artifact getDropArtifact() {

@@ -20,8 +20,9 @@ public class ArtifactDirector {
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
 
-        if (random.nextInt(1, 100) > 10)
+        if (random.nextInt(1, 100) > 15){
             return null;
+        }
         return randomArtifacts(builder, level);
     }
 

@@ -12,26 +12,17 @@ import ft.swingy.Artifacts.Artifact;
 import ft.swingy.Enemy.Enemy;
 
 public class Hero {
-    public String name;
-    public String type;
-    public int level;
-    public int experience;
-    public int attack;
-    public int defense;
-    public int hitPoints;
-    public int maxHitPoints;
+    private String name;
+    private String type;
+    private int level;
+    private int experience;
+    private int attack;
+    private int defense;
+    private int hitPoints;
+    private int maxHitPoints;
+    private ArrayList<String> combatLogs;
     final Artifact[] artifacts = new Artifact[3];
     public Hero(){};
-
-    public void printStats() {
-        System.out.println("Name: " + name);
-        System.out.println("Type: " + type);
-        System.out.println("Level: " + level);
-        System.out.println("Experience: " + experience);
-        System.out.println("Attack: " + attack);
-        System.out.println("Defense: " + defense);
-        System.out.println("HP: " + hitPoints);
-    }
 
     public String getName() {
         return this.name;
@@ -60,6 +51,42 @@ public class Hero {
 
     public int getLevel(){
         return this.level;
+    }
+
+    public ArrayList<String> getCombatLogs(){
+        return this.combatLogs;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public void setHitPoints(int hitPoints) {
+        this.hitPoints = hitPoints;
+    }
+
+    public void setMaxHitPoints(int maxHitPoints) {
+        this.maxHitPoints = maxHitPoints;
     }
 
     public void equipArtifact(Artifact artifact) {
@@ -103,8 +130,7 @@ public class Hero {
         this.defense += 10;
         this.maxHitPoints += 100;
         this.hitPoints = maxHitPoints;
-        // System.out.println("Level " + this.level + " reached !");
-        // printStats();
+        combatLogs.add("Level " + this.level + " reached !");
     }
 
     public void earnXp(Enemy enemy) {
@@ -120,47 +146,48 @@ public class Hero {
         damage -= this.defense;
         if (damage <= 0) {
             damage = 0;
-            // System.out.println("Your defense is too high, the enemy can't damage you !!!");
+            combatLogs.add("Your defense is too high, the enemy can't damage you !");
         }
         else{
             this.hitPoints -= damage;
             if (this.hitPoints < 0)
                 this.hitPoints = 0;
-            // System.out.println("You have taken " + damage + " damage.       remaing health (You) : " + (this.hitPoints) + "!");
+            combatLogs.add("You have taken " + damage + " damage.       remaing health (You) : " + (this.hitPoints) + "!");
         }
     }
 
     public boolean tryToRun() {
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
-
+        combatLogs = new ArrayList<String>();
         if (random.nextInt(100) <= 50) {
-            // System.out.println("You have successfully ran away !");
+            combatLogs.add("You have successfully ran away !");
             return true;
         }
-        // System.out.println("You have failed to run away, you must fight !");
+        combatLogs.add("You have failed to run away, you must fight !");
         return false;
     }
 
     public boolean fightSimulation() {
         Random random = new Random();
         Enemy enemy = new Enemy(level);
-        random.setSeed(System.currentTimeMillis());
 
+        random.setSeed(System.currentTimeMillis());
+        combatLogs = new ArrayList<String>();
         while (this.hitPoints > 0 && enemy.getHitPoints() > 0) {
             //5% chance of "missing" the attack
             if (random.nextInt(100) > 5){
-                enemy.takeDamage(this.attack);
+                enemy.takeDamage(this.attack, combatLogs);
             }
-            // else
-                // System.out.println("You have missed your attack !");
+            else
+                combatLogs.add("You have missed your attack !");
             //Check if the enemy is dead
             if (enemy.getHitPoints() <= 0) {
-                // System.out.println("You have defeated the enemy and regenerated 75% of your max health !");
+                combatLogs.add("You have defeated the enemy and regenerated 75% of your max health !");
                 this.hitPoints += (int)(this.maxHitPoints * 0.75);
                 if (this.hitPoints > this.maxHitPoints)
                     this.hitPoints = this.maxHitPoints;
-                // System.out.println("You're now at " + this.hitPoints + " HP !");
+                combatLogs.add("You're now at " + this.hitPoints + " HP !");
                 earnXp(enemy);
                 return true;
             }
@@ -168,10 +195,10 @@ public class Hero {
             if (random.nextInt(90) > 10) {
                 takeDamage(enemy.getAttack());
             }
-            // else
-            //     System.out.println("The enemy has missed his attack !");
+            else
+                combatLogs.add("The enemy has missed his attack !");
             if (this.hitPoints <= 0) {
-                // System.out.println("You have been defeated by the enemy !");
+                combatLogs.add(name + " has been defeated by the enemy !");
                 return false;
             }
         }
@@ -211,7 +238,7 @@ public class Hero {
             file.createNewFile();
         }
         catch (Exception e) {
-            // System.out.println("Error occurred while creating save file: " + e.getMessage());
+            System.out.println("Error occurred while creating save file: " + e.getMessage());
         }
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -229,7 +256,7 @@ public class Hero {
             }
             reader.close();
         } catch (IOException e) {
-            // System.out.println("Error occurred while saving stats: " + e.getMessage());
+            System.out.println("Error occurred while saving stats: " + e.getMessage());
         }
         if (skip == -1) // new hero
             addStatsToList(lines);
@@ -265,10 +292,10 @@ public class Hero {
             reader.close();
         }
         catch (Exception e) {
-            // System.out.println("Error occurred while deleting hero from save: " + e.getMessage());
+            System.out.println("Error occurred while deleting hero from save: " + e.getMessage());
         }
         if (skip > 0){
-            // System.out.println("Potential Error: Reached EOF before deleting all mandatory lines, save file might be corrupted");
+            System.out.println("Potential Error: Reached EOF before deleting all mandatory lines, save file might be corrupted");
         }
         try {
             FileWriter writer = new FileWriter(file);
