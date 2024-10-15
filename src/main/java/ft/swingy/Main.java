@@ -14,10 +14,10 @@ import javax.swing.SwingUtilities;
 
 import ft.swingy.Artifacts.Artifact;
 import ft.swingy.Artifacts.ArtifactDirector;
+import ft.swingy.GUI.GameGUI;
 import ft.swingy.Game.GameModel;
 import ft.swingy.Game.GameMapModel;
 import ft.swingy.Game.LoaderModel;
-import ft.swingy.GameGUI.GameGUI;
 import ft.swingy.Hero.Hero;
 
 public class Main
@@ -26,14 +26,17 @@ public class Main
     {
         //terminal
 
-        GameController game = new GameController();
-        game.gameStart();
+        // GameController game = new GameController();
+        // game.gameStart();
         //GUI
-        // SwingUtilities.invokeLater(new Runnable() {
-        //     public void run() {
-
-        //     }
-        // });
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                GameMapModel map = new GameMapModel(5);
+                HeroDirectorModel director = new HeroDirectorModel();
+                Hero hero = director.makeWarrior(new HeroBuilder(), "Warrior");
+                GameGUI game = new GameGUI(map, hero);
+            }
+        });
 
     }
 }

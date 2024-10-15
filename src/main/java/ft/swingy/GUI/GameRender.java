@@ -1,4 +1,4 @@
-package ft.swingy.GameGUI;
+package ft.swingy.GUI;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -13,7 +13,7 @@ import ft.swingy.Game.GameMapModel;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class Board extends JPanel{
+public class GameRender extends JPanel{
     private BufferedImage tileset;
     private int mapStartX;
     private int mapStartY;
@@ -25,11 +25,9 @@ public class Board extends JPanel{
     private GameMapModel map;
     private boolean init;
     public boolean inFight;
-    private GameGUI gameGUI;
 
-    public Board(GameMapModel map, GameGUI gameGUI) {
+    public GameRender(GameMapModel map) {
         this.map = map;
-        this.gameGUI = gameGUI;
         mapTileSize = map.getSize() * 32;
         init = false;
         try {
@@ -38,50 +36,11 @@ public class Board extends JPanel{
         catch (Exception e) {
             System.out.println("ERROR\n");
         }
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                updateGUIOnResize();
-            }
-        });
 
-        addKeyListener(new KeyAdapter() { //need to handle fight here
-            @Override
-            public void keyPressed(KeyEvent e) {
-                int status = 0;
-                if (inFight)
-                    return ;
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_W:
-                        // status = map.movePlayer(KeyEvent.VK_W);
-                        if (status > 0)
-                            movePlayer(KeyEvent.VK_W);
-                        break;
-                    case KeyEvent.VK_S:
-                        // status = map.movePlayer(KeyEvent.VK_S);
-                        if (status > 0)
-                            movePlayer(KeyEvent.VK_S);
-                        break;
-                    case KeyEvent.VK_A:
-                        // status = map.movePlayer(KeyEvent.VK_A);
-                        if (status > 0)
-                            movePlayer(KeyEvent.VK_A);
-                        break;
-                    case KeyEvent.VK_D:
-                        // status = map.movePlayer(KeyEvent.VK_D);
-                        if (status > 0)
-                            movePlayer(KeyEvent.VK_D);
-                        break;
-                }
-                if (status == 2){
-                    // gameGUI.toggleFightText();
-                    inFight = true;
-                }
-            }
-        });
+
     }
 
-    private void movePlayer(int key){
+    public void movePlayer(int key){
         switch (key) {
             case KeyEvent.VK_W:
                 mapStartY += 32;
@@ -137,7 +96,7 @@ public class Board extends JPanel{
             for (int j = 0; j < this.getSize().height; j += 32)
             {
                 if (j >= mapStartY && i >= mapStartX && j < mapTileSize + mapStartY && i < mapTileSize + mapStartX){
-                    if (map.getAt((i - mapStartX) /32, (j - mapStartY)/32) == ID.Enemy.getId())
+                    if (map.getAt((i - mapStartX) /32, (j - mapStartY) / 32) == ID.Enemy.getId())
                         g.drawImage(enemyTile, i, j, null);
                     else if (map.getAt((i - mapStartX) / 32, (j - mapStartY) / 32) == ID.Empty.getId())
                         g.drawImage(mapTile, i, j, null);
@@ -173,7 +132,7 @@ public class Board extends JPanel{
         }
     }
 
-    private void updateGUIOnResize(){
+    public void updateGUIOnResize(){
         mapStartX = (this.getSize().width - mapTileSize) / 2;
         mapStartY = (this.getSize().height - mapTileSize) / 2;
         playerX = mapStartX + ((map.getSize() / 2) * 32);

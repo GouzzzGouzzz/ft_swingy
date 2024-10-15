@@ -49,6 +49,10 @@ public class Hero {
         return this.level * 1000 + (this.level - 1) * (this.level - 1) * 450;
     }
 
+    public Artifact getArtifact(int index){
+        return this.artifacts[index];
+    }
+
     public int getLevel(){
         return this.level;
     }

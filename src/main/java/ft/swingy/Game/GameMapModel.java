@@ -23,6 +23,8 @@ public class GameMapModel {
             }
         }
         map[playerX][playerY] = ID.Player.getId();
+        System.out.println("coord: " + playerX + " " + playerY);
+        System.out.println("Size: " + size);
     }
 
     public int getAt(int x, int y) {

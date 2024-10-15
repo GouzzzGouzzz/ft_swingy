@@ -1,4 +1,4 @@
-package ft.swingy.GameGUI;
+package ft.swingy.GUI;
 
 public enum Tiles {
     GRASS(32, 32, 32, 32),
