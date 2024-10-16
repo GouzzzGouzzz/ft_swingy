@@ -17,9 +17,13 @@ public class PopUp extends JOptionPane{
 
     public int enemyEncounter(){
         int choice = 0;
-        choice = showConfirmDialog(frame, "MESSAGE",
-        "TITRE", JOptionPane.YES_NO_OPTION);
-
+        choice = showConfirmDialog(frame, "You have encountered an enemy! Do you want to fight?",
+        null, JOptionPane.YES_NO_OPTION);
         return choice;
+    }
+
+    public void gameOver(){
+        showMessageDialog(frame, "Game Over !\n You have been defeated!",
+        "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
     }
 }

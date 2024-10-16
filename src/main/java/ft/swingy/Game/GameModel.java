@@ -80,6 +80,9 @@ public class GameModel {
     public MoveResult getMoveStatus() {
         return moveStatus;
     }
+    public void setMoveStatus(MoveResult moveStatus) {
+        this.moveStatus = moveStatus;
+    }
 
     public GameMapModel getMap() {
         return gameMapModel;

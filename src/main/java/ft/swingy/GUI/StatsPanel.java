@@ -45,6 +45,8 @@ public class StatsPanel extends JPanel{
         add(helm);
         add(turn);
         setBackground(Color.GRAY);
+        revalidate();
+        repaint();
     }
 
     public void setStats(Hero hero, int turnNumber){
@@ -59,5 +61,7 @@ public class StatsPanel extends JPanel{
         armor.setText("Armor: " + hero.getArtifact(1).getQuality());
         helm.setText("Helm: " + hero.getArtifact(2).getQuality());
         turn.setText("Turn: " + turnNumber);
+        revalidate();
+        repaint();
     }
 }

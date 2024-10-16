@@ -28,6 +28,8 @@ public class LogsPanel extends JPanel {
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scroll, BorderLayout.CENTER);
+        revalidate();
+        repaint();
     }
 
     public void setText(ArrayList<String> text) {
@@ -35,5 +37,8 @@ public class LogsPanel extends JPanel {
         for (int i = 0; i < text.size(); i++) {
             logs.append(text.get(i) + "\n");
         }
+        scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
+        revalidate();
+        repaint();
     }
 }

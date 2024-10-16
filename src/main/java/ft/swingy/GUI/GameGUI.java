@@ -23,6 +23,7 @@ public class GameGUI extends JFrame{
     private GameMapModel map;
     private GameModel game;
     private PopUp popup;
+    private Hero hero;
     private volatile boolean inFight;
 
     public GameGUI(GameMapModel map, Hero hero) {
@@ -34,11 +35,12 @@ public class GameGUI extends JFrame{
         layeredPane.setPreferredSize(new Dimension(813, 813));
         game = new GameModel(hero, map);
         popup = new PopUp(this);
+        this.hero = hero;
+
+        //frame
         setVisible(false);
         setTitle("Swingy - Dungeon Crawler");
         setContentPane(layeredPane);
-
-        //frame
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(813, 813);
@@ -46,6 +48,7 @@ public class GameGUI extends JFrame{
         setResizable(false);
         setFocusable(true);
         requestFocusInWindow();
+
         //StatsPanel
         statsPanel.setBounds(0, 0, 200, 250);
 
@@ -62,9 +65,10 @@ public class GameGUI extends JFrame{
 
         //rendering game
         render.setLayout(null);
-        // render.requestFocusInWindow();
         //23 par 23 tiles
         render.setBounds(0, 0, 737, 737);
+
+
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -74,6 +78,8 @@ public class GameGUI extends JFrame{
 
                 // System.out.println("Resized" + e.getComponent().getSize());
                 setSize(813, 813);
+                revalidate();
+                repaint();
             }
         });
 
@@ -108,21 +114,45 @@ public class GameGUI extends JFrame{
                         }
                     break;
                 }
+                if (game.getMoveStatus() != MoveResult.INVALID_MOVE){
+                    game.incrementTurn();
+                }
             }
         });
         setVisible(true);
+        repaint();
         gameLoop();
     }
 
     private void gameLoop(){
         inFight = false;
         new Thread(() -> {
+            int fightChoice;
             while (true) {
-                System.out.println("Game loop");
-                if (game.getMoveStatus() == MoveResult.ENEMY_ENCOUNTER){
-                    inFight = true;
-                    popup.enemyEncounter();
+                if (isValid() == false){
+                    System.out.println("Invalid frame");
                 }
+                if (game.getMoveStatus() == MoveResult.ENEMY_ENCOUNTER){
+                    game.setMoveStatus(MoveResult.INVALID_MOVE);
+                    inFight = true;
+                    fightChoice = popup.enemyEncounter();
+                    if (fightChoice == JOptionPane.YES_OPTION){
+                        if (game.playerFight() == false){
+                            logs.setText(game.getCombatLogs());
+                            popup.gameOver();
+                            return ;
+                        }
+                        else{
+                            inFight = false;
+                            logs.setText(game.getCombatLogs());
+                        }
+                    }
+                    else if (fightChoice == JOptionPane.NO_OPTION){
+                        //run
+                    }
+                }
+
+                Thread.yield();
             }
         }).start();
     }
