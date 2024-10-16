@@ -18,6 +18,7 @@ public class StatsPanel extends JPanel{
     CustomLabel weapon;
     CustomLabel armor;
     CustomLabel helm;
+    CustomLabel turn;
 
     public StatsPanel() {
         setLayout(new GridLayout(11, 1));
@@ -31,6 +32,7 @@ public class StatsPanel extends JPanel{
         weapon = new CustomLabel("Weapon: ");
         armor = new CustomLabel("Armor: ");
         helm = new CustomLabel("Helm: ");
+        turn = new CustomLabel("Turn: ");
         add(name);
         add(type);
         add(level);
@@ -41,10 +43,11 @@ public class StatsPanel extends JPanel{
         add(weapon);
         add(armor);
         add(helm);
+        add(turn);
         setBackground(Color.GRAY);
     }
 
-    public void setStats(Hero hero){
+    public void setStats(Hero hero, int turnNumber){
         name.setText("Name: " + hero.getName());
         type.setText("Type: " + hero.getType());
         level.setText("Level: " + hero.getLevel());
@@ -55,6 +58,6 @@ public class StatsPanel extends JPanel{
         weapon.setText("Weapon: " + hero.getArtifact(0).getQuality());
         armor.setText("Armor: " + hero.getArtifact(1).getQuality());
         helm.setText("Helm: " + hero.getArtifact(2).getQuality());
-
+        turn.setText("Turn: " + turnNumber);
     }
 }

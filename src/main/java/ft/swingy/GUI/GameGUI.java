@@ -2,7 +2,6 @@ package ft.swingy.GUI;
 
 import javax.swing.*;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -18,11 +17,13 @@ import ft.swingy.Hero.Hero;
 //This contains all GUI components to interact with
 public class GameGUI extends JFrame{
     private GameRender render;
-    JLayeredPane layeredPane;
-    StatsPanel statsPanel;
-    LogsPanel logs;
-    GameMapModel map;
-    GameModel game;
+    private JLayeredPane layeredPane;
+    private StatsPanel statsPanel;
+    private LogsPanel logs;
+    private GameMapModel map;
+    private GameModel game;
+    private PopUp popup;
+    private volatile boolean inFight;
 
     public GameGUI(GameMapModel map, Hero hero) {
 
@@ -32,7 +33,7 @@ public class GameGUI extends JFrame{
         logs = new LogsPanel();
         layeredPane.setPreferredSize(new Dimension(813, 813));
         game = new GameModel(hero, map);
-
+        popup = new PopUp(this);
         setVisible(false);
         setTitle("Swingy - Dungeon Crawler");
         setContentPane(layeredPane);
@@ -56,7 +57,10 @@ public class GameGUI extends JFrame{
         layeredPane.add(logs, JLayeredPane.PALETTE_LAYER);
         layeredPane.add(statsPanel, JLayeredPane.PALETTE_LAYER);
 
-        //board
+        //popup
+        layeredPane.add(popup, JLayeredPane.POPUP_LAYER);
+
+        //rendering game
         render.setLayout(null);
         // render.requestFocusInWindow();
         //23 par 23 tiles
@@ -76,6 +80,8 @@ public class GameGUI extends JFrame{
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                if (inFight == true)
+                    return ;
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W:
                         game.movePlayer(Direction.UP);
@@ -90,13 +96,13 @@ public class GameGUI extends JFrame{
                         }
                     break;
                     case KeyEvent.VK_A:
-                        game.movePlayer(Direction.RIGHT);
+                        game.movePlayer(Direction.LEFT);
                         if (game.getMoveStatus() != MoveResult.INVALID_MOVE) {
                             render.movePlayer(KeyEvent.VK_A);
                         }
                     break;
                     case KeyEvent.VK_D:
-                        game.movePlayer(Direction.LEFT);
+                        game.movePlayer(Direction.RIGHT);
                         if (game.getMoveStatus() != MoveResult.INVALID_MOVE) {
                             render.movePlayer(KeyEvent.VK_D);
                         }
@@ -105,5 +111,19 @@ public class GameGUI extends JFrame{
             }
         });
         setVisible(true);
+        gameLoop();
+    }
+
+    private void gameLoop(){
+        inFight = false;
+        new Thread(() -> {
+            while (true) {
+                System.out.println("Game loop");
+                if (game.getMoveStatus() == MoveResult.ENEMY_ENCOUNTER){
+                    inFight = true;
+                    popup.enemyEncounter();
+                }
+            }
+        }).start();
     }
 }

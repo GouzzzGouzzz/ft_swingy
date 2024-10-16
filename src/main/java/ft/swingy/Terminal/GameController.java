@@ -39,6 +39,7 @@ public class GameController {
         }
         gameModel = new GameModel(hero, new GameMapModel(hero.getLevel()));
         gameView.startGame(hero);
+
         while (true) {
             GameMapView.MapWithHeroStats(gameModel.getMap(), gameModel.getTurn(), gameModel.getHero());
             while (input == null) {

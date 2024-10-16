@@ -36,8 +36,6 @@ public class GameRender extends JPanel{
         catch (Exception e) {
             System.out.println("ERROR\n");
         }
-
-
     }
 
     public void movePlayer(int key){
@@ -84,8 +82,8 @@ public class GameRender extends JPanel{
         if (!init){
             mapStartX = (this.getSize().width - mapTileSize) / 2;
             mapStartY = (this.getSize().height - mapTileSize) / 2;
-            playerX = mapStartX + ((map.getSize() / 2) * 32);
-            playerY = mapStartY + ((map.getSize() / 2) * 32);
+            playerX = mapStartX + (map.getPlayerX() * 32);
+            playerY = mapStartY + (map.getPlayerY() * 32);
             //Round up to 32 to be aligned with tiles
             playerX = ((playerX + 31) / 32) * 32;
             playerY = ((playerY + 31) / 32) * 32;
@@ -96,7 +94,7 @@ public class GameRender extends JPanel{
             for (int j = 0; j < this.getSize().height; j += 32)
             {
                 if (j >= mapStartY && i >= mapStartX && j < mapTileSize + mapStartY && i < mapTileSize + mapStartX){
-                    if (map.getAt((i - mapStartX) /32, (j - mapStartY) / 32) == ID.Enemy.getId())
+                    if (map.getAt((i - mapStartX) / 32, (j - mapStartY) / 32) == ID.Enemy.getId())
                         g.drawImage(enemyTile, i, j, null);
                     else if (map.getAt((i - mapStartX) / 32, (j - mapStartY) / 32) == ID.Empty.getId())
                         g.drawImage(mapTile, i, j, null);
@@ -135,8 +133,8 @@ public class GameRender extends JPanel{
     public void updateGUIOnResize(){
         mapStartX = (this.getSize().width - mapTileSize) / 2;
         mapStartY = (this.getSize().height - mapTileSize) / 2;
-        playerX = mapStartX + ((map.getSize() / 2) * 32);
-        playerY = mapStartY + ((map.getSize() / 2) * 32);
+        playerX = mapStartX + (map.getPlayerX() * 32);
+        playerY = mapStartY + (map.getPlayerY() * 32);
         mapStartX += mapOffsetX;
         mapStartY += mapOffsetY;
         playerX = ((playerX + 31) / 32) * 32;
