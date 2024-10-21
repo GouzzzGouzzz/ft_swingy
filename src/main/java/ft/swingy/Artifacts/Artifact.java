@@ -17,5 +17,4 @@ public class Artifact {
     public int getQuality() {
         return quality;
     }
-
 }

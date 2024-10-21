@@ -70,6 +70,7 @@ public class GameController {
                             if (gameView.takeArtifactsInput(read) == true){
                                 gameModel.getHero().equipArtifact(gameModel.getDropArtifact());
                             }
+                            gameModel.resetArtifact();
                         }
                     };
                 }
@@ -90,7 +91,7 @@ public class GameController {
                                 }
                                 gameModel.resetArtifact();
                             }
-                        };
+                        }
                     }
                     else{
                         System.out.println("You've successfully ran away !");

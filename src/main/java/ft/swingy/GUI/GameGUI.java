@@ -23,7 +23,6 @@ public class GameGUI extends JFrame{
     private GameMapModel map;
     private GameModel game;
     private PopUp popup;
-    private Hero hero;
     private volatile boolean inFight;
 
     public GameGUI(GameMapModel map, Hero hero) {
@@ -35,7 +34,6 @@ public class GameGUI extends JFrame{
         layeredPane.setPreferredSize(new Dimension(813, 813));
         game = new GameModel(hero, map);
         popup = new PopUp(this);
-        this.hero = hero;
 
         //frame
         setVisible(false);
@@ -127,7 +125,7 @@ public class GameGUI extends JFrame{
     private void gameLoop(){
         inFight = false;
         new Thread(() -> {
-            int fightChoice;
+            int choice;
             while (true) {
                 if (isValid() == false){
                     System.out.println("Invalid frame");
@@ -135,8 +133,8 @@ public class GameGUI extends JFrame{
                 if (game.getMoveStatus() == MoveResult.ENEMY_ENCOUNTER){
                     game.setMoveStatus(MoveResult.INVALID_MOVE);
                     inFight = true;
-                    fightChoice = popup.enemyEncounter();
-                    if (fightChoice == JOptionPane.YES_OPTION){
+                    choice = popup.enemyEncounter();
+                    if (choice == JOptionPane.YES_OPTION){
                         if (game.playerFight() == false){
                             logs.setText(game.getCombatLogs());
                             popup.gameOver();
@@ -145,13 +143,46 @@ public class GameGUI extends JFrame{
                         else{
                             inFight = false;
                             logs.setText(game.getCombatLogs());
+                            popup.fightWon();
+                            game.dropArtifact();
+                            if (game.getDropArtifact() != null)
+                            {
+                                choice = popup.artifactDrop(game.getDropArtifact());
+                                if (choice == JOptionPane.YES_OPTION){
+                                    game.getHero().equipArtifact(game.getDropArtifact());
+                                }
+                                game.resetArtifact();
+                            }
                         }
                     }
-                    else if (fightChoice == JOptionPane.NO_OPTION){
-                        //run
+                    else{
+                        if (game.playerTryToRun() == false){
+                            if (game.playerFight() == false){
+                                logs.setText(game.getCombatLogs());
+                                popup.gameOver();
+                                return ;
+                            }
+                            else{
+                                game.dropArtifact();
+                                popup.fightWon();
+                                inFight = false;
+                                logs.setText(game.getCombatLogs());
+                                if (game.getDropArtifact() != null)
+                                {
+                                    choice = popup.artifactDrop(game.getDropArtifact());
+                                    if (choice == JOptionPane.YES_OPTION){
+                                        game.getHero().equipArtifact(game.getDropArtifact());
+                                    }
+                                    game.resetArtifact();
+                                }
+                            }
+                        }
+                        else{
+                            inFight = false;
+                            popup.runAway();
+                        }
                     }
                 }
-
                 Thread.yield();
             }
         }).start();
