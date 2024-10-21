@@ -2,9 +2,6 @@ package ft.swingy.GUI;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 

@@ -20,7 +20,6 @@ public class GameGUI extends JFrame{
     private JLayeredPane layeredPane;
     private StatsPanel statsPanel;
     private LogsPanel logs;
-    private GameMapModel map;
     private GameModel game;
     private PopUp popup;
     private volatile boolean inFight;
