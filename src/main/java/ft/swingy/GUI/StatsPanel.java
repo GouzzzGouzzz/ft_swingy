@@ -61,9 +61,18 @@ public class StatsPanel extends JPanel{
         attack.setText("Attack: " + hero.getAttack());
         defense.setText("Defense: " + hero.getDefense());
         hitPoints.setText("HP: " + hero.getHitPoints() + "/" + hero.getMaxHitPoints());
-        weapon.setText("Weapon: " + hero.getArtifact(0).getQuality());
-        armor.setText("Armor: " + hero.getArtifact(1).getQuality());
-        helm.setText("Helm: " + hero.getArtifact(2).getQuality());
+        if (hero.getArtifact(0) != null)
+            weapon.setText("Weapon: " + hero.getArtifact(0).getQuality());
+        else
+            weapon.setText("Weapon: None");
+        if (hero.getArtifact(1) != null)
+            armor.setText("Armor: " + hero.getArtifact(1).getQuality());
+        else
+            armor.setText("Armor: None");
+        if (hero.getArtifact(2) != null)
+            helm.setText("Helm: " + hero.getArtifact(2).getQuality());
+        else
+            helm.setText("Helm: None");
         if (showTurn){
             turn.setText("Turn: " + turnNumber);
         }

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
+import java.awt.event.ActionEvent;
 
 import ft.swingy.Game.LoaderModel;
 import ft.swingy.Hero.Hero;
@@ -29,11 +30,12 @@ public class HeroButton extends JButton{
 
         addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 LoaderModel loader = new LoaderModel();
                 Hero hero = loader.loadHero(id);
                 if (hero != null){
                     root.setHero(hero);
+                    root.removeLoadingMenu();
                     root.startGame();
                 }
             }

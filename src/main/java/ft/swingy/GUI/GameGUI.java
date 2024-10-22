@@ -24,8 +24,11 @@ public class GameGUI extends JFrame{
     private PopUp popup;
     private Hero hero;
     private volatile boolean inFight;
+
     //
+        HeroCreation heroCreation;
     //
+
     //
     private StatsPanel statsSelectPanel;
     private JScrollPane heroScroll;
@@ -56,37 +59,34 @@ public class GameGUI extends JFrame{
     private void loadOrCreateHero(){
         statsSelectPanel = new StatsPanel(false);
         heroList = new HeroList(statsSelectPanel, this);
+        statsSelectPanel.setPreferredSize(new Dimension(200, this.getHeight()));
         if (heroList.getHeroCount() == 0){
-            //create hero
-            System.out.println("Creating new hero");
+            heroCreation = new HeroCreation(statsSelectPanel, this);
+            setLayout(new BorderLayout());
+            add(heroCreation.getButtonPanel(), BorderLayout.CENTER);
+            add(heroCreation.getNamePanel(), BorderLayout.SOUTH);
+            add(statsSelectPanel, BorderLayout.WEST);
         }
         if (popup.loadOrCreate() == JOptionPane.NO_OPTION){
             heroList = new HeroList(statsSelectPanel, this);
             heroScroll = new JScrollPane(heroList);
             setLayout(new BorderLayout());
-            statsSelectPanel.setPreferredSize(new Dimension(200, this.getHeight()));
             heroScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             heroScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             add(heroScroll, BorderLayout.CENTER);
             add(statsSelectPanel, BorderLayout.WEST);
         }
         else{
-            JTextField heroName = new JTextField();
-            JPanel classPanel = new JPanel();
-            JButton rogue = new JButton("Rogue");
-            JButton warrior = new JButton("Warrior");
-            classPanel.add(rogue);
-            classPanel.add(warrior);
+            heroCreation = new HeroCreation(statsSelectPanel, this);
             setLayout(new BorderLayout());
-            add(heroName, BorderLayout.SOUTH);
-            add(classPanel, BorderLayout.CENTER);
+            add(heroCreation.getButtonPanel(), BorderLayout.CENTER);
+            add(heroCreation.getNamePanel(), BorderLayout.SOUTH);
+            add(statsSelectPanel, BorderLayout.WEST);
         }
         setVisible(true);
     }
 
     public void startGame(){
-        remove(statsSelectPanel);
-        remove(heroScroll);
         game = new GameModel(hero, null);
         game.createaNewMap();
         render = new GameRender(game.getMap());
@@ -97,6 +97,21 @@ public class GameGUI extends JFrame{
         revalidate();
         repaint();
         gameLoop();
+    }
+
+    public void removeLoadingMenu(){
+        remove(statsSelectPanel);
+        remove(heroScroll);
+        revalidate();
+        repaint();
+    }
+
+    public void removeHeroCreationMenu(){
+        remove(statsSelectPanel);
+        remove(heroCreation.getButtonPanel());
+        remove(heroCreation.getNamePanel());
+        revalidate();
+        repaint();
     }
 
     public void setupGamePane(){
