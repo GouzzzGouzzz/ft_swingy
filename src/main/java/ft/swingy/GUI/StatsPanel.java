@@ -57,7 +57,7 @@ public class StatsPanel extends JPanel{
         name.setText("Name: " + hero.getName());
         type.setText("Type: " + hero.getType());
         level.setText("Level: " + hero.getLevel());
-        experience.setText("Experience: " + hero.getExperience());
+        experience.setText("Experience: " + hero.getExperience() + "/" + hero.getNextLevelXp());
         attack.setText("Attack: " + hero.getAttack());
         defense.setText("Defense: " + hero.getDefense());
         hitPoints.setText("HP: " + hero.getHitPoints() + "/" + hero.getMaxHitPoints());

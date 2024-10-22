@@ -13,7 +13,6 @@ public class PopUp extends JOptionPane{
 
     public PopUp(JFrame parentFrame) {
         setBackground(Color.GRAY);
-        // setBounds(300,300,200,200);
         frame = parentFrame;
     }
 
@@ -44,5 +43,21 @@ public class PopUp extends JOptionPane{
     public void runAway(){
         showMessageDialog(frame, "You have successfully ran away from the enemy!",
         "RUN AWAY", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public int loadOrCreate(){
+        int choice = 0;
+        Object[] options = {"Create", "Load"};
+        choice = showOptionDialog(
+        frame,
+        "Do you want to laod or create a new hero ?",
+        "Hero Loading",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        options,
+        options[1]
+        );
+        return choice;
     }
 }

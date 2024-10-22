@@ -24,16 +24,24 @@ public class Main
 {
     public static void main( String[] args )
     {
-        //terminal
-
-        // GameController game = new GameController();
-        // game.gameStart();
-        //GUI
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                GameGUI game = new GameGUI();
-            }
-        });
-
+        if (args.length == 0 || args.length > 1){
+            System.out.println("Please provide a mode: terminal or gui, and only one of them");
+            return ;
+        }
+        if (args[0].equals("console")){
+            GameController gameController = new GameController();
+            gameController.gameStart();
+        }
+        else if (args[0].equals("gui")){
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    GameGUI game = new GameGUI();
+                }
+            });
+        }
+        else {
+            System.out.println("Please provide a mode: terminal or gui");
+            return ;
+        }
     }
 }

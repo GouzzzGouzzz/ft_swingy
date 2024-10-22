@@ -21,7 +21,6 @@ public class LoaderController {
 
         saveFile = new File("src/main/java/ft/swingy/save/saves.txt");
         totalHeroSaved = view.getTotalHeroFound();
-
         if (!saveFile.exists() || saveFile.length() == 0) {
             view.NoHeroSaved();
             return null;

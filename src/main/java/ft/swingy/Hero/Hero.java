@@ -141,7 +141,7 @@ public class Hero {
         this.experience += enemy.getXp();
         //Leveling up is based on the following formula level*1000+(level-1)ˆ2 * 450
         //the power of 2 "ˆ2" is done by doing "x * x"
-        if (this.experience >= this.level * 1000 + (this.level - 1) * (this.level - 1) * 450 && this.level < 100) {
+        if (this.experience >= getNextLevelXp()) {
             levelUp();
         }
     }

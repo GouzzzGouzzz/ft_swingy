@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent;
 
 import ft.swingy.Game.Direction;
 import ft.swingy.Game.GameModel;
-import ft.swingy.Game.LoaderModel;
 import ft.swingy.Game.MoveResult;
 import ft.swingy.Hero.Hero;
 
@@ -24,9 +23,13 @@ public class GameGUI extends JFrame{
     private GameModel game;
     private PopUp popup;
     private Hero hero;
+    StatsPanel statsSelectPanel;
+    JScrollPane heroScroll;
+    HeroList heroList;
     private volatile boolean inFight;
 
     public GameGUI() {
+
         setVisible(false);
         setTitle("Swingy - Dungeon Crawler");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,44 +41,54 @@ public class GameGUI extends JFrame{
         layeredPane = new JLayeredPane();
         statsPanel = new StatsPanel(true);
         logs = new LogsPanel();
-
-        hero = loadOrCreateHero();
-        if (true)
-            return ;
-        game = new GameModel(hero, null);
         popup = new PopUp(this);
+        loadOrCreateHero();
+    }
+
+    public void setHero(Hero hero){
+        this.hero = hero;
+    }
+
+    private void loadOrCreateHero(){
+        statsSelectPanel = new StatsPanel(false);
+        heroList = new HeroList(statsSelectPanel, this);
+        if (heroList.getHeroCount() == 0){
+            //create hero
+            System.out.println("Creating new hero");
+        }
+        if (popup.loadOrCreate() == JOptionPane.NO_OPTION){
+            heroList = new HeroList(statsSelectPanel, this);
+            heroScroll = new JScrollPane(heroList);
+            setLayout(new BorderLayout());
+            statsSelectPanel.setPreferredSize(new Dimension(200, this.getHeight()));
+            heroScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            heroScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            add(heroScroll, BorderLayout.CENTER);
+            add(statsSelectPanel, BorderLayout.WEST);
+        }
+        else{
+            System.out.println("Creating new hero");
+        }
+        setVisible(true);
+    }
+
+    public void startGame(){
+        remove(statsSelectPanel);
+        remove(heroScroll);
+        game = new GameModel(hero, null);
         game.createaNewMap();
         render = new GameRender(game.getMap());
-
-        //frame
-
-
         //GamePane
         setupGamePane();
         addGameListener();
-
         setVisible(true);
+        revalidate();
         repaint();
         gameLoop();
     }
 
-    private Hero loadOrCreateHero(){
-        StatsPanel stats = new StatsPanel(false);
-        LoaderModel loader = new LoaderModel();
-        HeroList heroList = new HeroList(stats);
-        JScrollPane scroll = new JScrollPane(heroList);
-
-        setLayout(new BorderLayout());
-        stats.setPreferredSize(new Dimension(200, this.getHeight()));
-        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        add(scroll, BorderLayout.CENTER);
-        add(stats, BorderLayout.WEST);
-        setVisible(true);
-        return null;
-    }
-
-    private void setupGamePane(){
+    public void setupGamePane(){
+        setVisible(false);
         layeredPane.setPreferredSize(new Dimension(813, 813));
         setContentPane(layeredPane);
         setLayout(null);
@@ -99,9 +112,9 @@ public class GameGUI extends JFrame{
         render.setLayout(null);
         //around 23 x 23 tiles
         render.setBounds(0, 0, 737, 737);
+        revalidate();
+        repaint();
     }
-
-
 
     private void addGameListener(){
         addComponentListener(new ComponentAdapter() {
@@ -159,6 +172,7 @@ public class GameGUI extends JFrame{
         inFight = false;
         new Thread(() -> {
             int choice;
+            statsPanel.setStats(game.getHero(), game.getTurn());
             while (true) {
                 if (isValid() == false){
                     // System.out.println("Invalid frame");
@@ -170,6 +184,7 @@ public class GameGUI extends JFrame{
                     if (choice == JOptionPane.YES_OPTION){
                         if (game.playerFight() == false){
                             logs.setText(game.getCombatLogs());
+                            statsPanel.setStats(game.getHero(), game.getTurn());
                             popup.gameOver();
                             return ;
                         }
@@ -186,12 +201,14 @@ public class GameGUI extends JFrame{
                                 }
                                 game.resetArtifact();
                             }
+                            statsPanel.setStats(game.getHero(), game.getTurn());
                         }
                     }
                     else{
                         if (game.playerTryToRun() == false){
                             if (game.playerFight() == false){
                                 logs.setText(game.getCombatLogs());
+                                statsPanel.setStats(game.getHero(), game.getTurn());
                                 popup.gameOver();
                                 return ;
                             }
@@ -208,6 +225,7 @@ public class GameGUI extends JFrame{
                                     }
                                     game.resetArtifact();
                                 }
+                                statsPanel.setStats(game.getHero(), game.getTurn());
                             }
                         }
                         else{

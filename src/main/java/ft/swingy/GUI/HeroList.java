@@ -8,8 +8,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 public class HeroList extends JPanel{
+    int heroSaved = 0;
 
-    public HeroList(StatsPanel statsPanel) {
+    public HeroList(StatsPanel statsPanel, GameGUI root) {
         File saveFile = new File("src/main/java/ft/swingy/save/saves.txt");
         int id = 0;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -18,9 +19,10 @@ public class HeroList extends JPanel{
             String line;
             while ((line = fileReader.readLine()) != null) {
                 if (line.contains("Name:")) {
-                    HeroButton heroButton = new HeroButton(id, statsPanel);
+                    HeroButton heroButton = new HeroButton(id, statsPanel, root);
                     heroButton.setText(line.substring(5));
                     id++;
+                    heroSaved++;
                     add(heroButton);
                 }
             }
@@ -30,5 +32,8 @@ public class HeroList extends JPanel{
         }
     }
 
+    public int getHeroCount(){
+        return heroSaved;
+    }
 }
 
