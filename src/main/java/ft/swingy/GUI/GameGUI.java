@@ -23,10 +23,14 @@ public class GameGUI extends JFrame{
     private GameModel game;
     private PopUp popup;
     private Hero hero;
-    StatsPanel statsSelectPanel;
-    JScrollPane heroScroll;
-    HeroList heroList;
     private volatile boolean inFight;
+    //
+    //
+    //
+    private StatsPanel statsSelectPanel;
+    private JScrollPane heroScroll;
+    private HeroList heroList;
+    //
 
     public GameGUI() {
 
@@ -67,7 +71,15 @@ public class GameGUI extends JFrame{
             add(statsSelectPanel, BorderLayout.WEST);
         }
         else{
-            System.out.println("Creating new hero");
+            JTextField heroName = new JTextField();
+            JPanel classPanel = new JPanel();
+            JButton rogue = new JButton("Rogue");
+            JButton warrior = new JButton("Warrior");
+            classPanel.add(rogue);
+            classPanel.add(warrior);
+            setLayout(new BorderLayout());
+            add(heroName, BorderLayout.SOUTH);
+            add(classPanel, BorderLayout.CENTER);
         }
         setVisible(true);
     }
