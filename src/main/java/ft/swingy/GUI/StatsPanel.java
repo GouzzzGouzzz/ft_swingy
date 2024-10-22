@@ -19,8 +19,10 @@ public class StatsPanel extends JPanel{
     CustomLabel armor;
     CustomLabel helm;
     CustomLabel turn;
+    boolean showTurn;
 
-    public StatsPanel() {
+    public StatsPanel(boolean showTurn) {
+        this.showTurn = showTurn;
         setLayout(new GridLayout(11, 1));
         name = new CustomLabel("Name: ");
         type = new CustomLabel("Type: ");
@@ -32,7 +34,6 @@ public class StatsPanel extends JPanel{
         weapon = new CustomLabel("Weapon: ");
         armor = new CustomLabel("Armor: ");
         helm = new CustomLabel("Helm: ");
-        turn = new CustomLabel("Turn: ");
         add(name);
         add(type);
         add(level);
@@ -43,7 +44,10 @@ public class StatsPanel extends JPanel{
         add(weapon);
         add(armor);
         add(helm);
-        add(turn);
+        if (showTurn){
+            turn = new CustomLabel("Turn: ");
+            add(turn);
+        }
         setBackground(Color.GRAY);
         revalidate();
         repaint();
@@ -60,8 +64,29 @@ public class StatsPanel extends JPanel{
         weapon.setText("Weapon: " + hero.getArtifact(0).getQuality());
         armor.setText("Armor: " + hero.getArtifact(1).getQuality());
         helm.setText("Helm: " + hero.getArtifact(2).getQuality());
-        turn.setText("Turn: " + turnNumber);
+        if (showTurn){
+            turn.setText("Turn: " + turnNumber);
+        }
         revalidate();
         repaint();
     }
+
+    public void setCorruptedSave(){
+        name.setText("Name: Corrupted Save");
+        type.setText("Type: Corrupted Save");
+        level.setText("Level: Corrupted Save");
+        experience.setText("Experience: Corrupted Save");
+        attack.setText("Attack: Corrupted Save");
+        defense.setText("Defense: Corrupted Save");
+        hitPoints.setText("HP: Corrupted Save");
+        weapon.setText("Weapon: Corrupted Save");
+        armor.setText("Armor: Corrupted Save");
+        helm.setText("Helm: Corrupted Save");
+        if (showTurn){
+            turn.setText("Turn: Corrupted Save");
+        }
+        revalidate();
+        repaint();
+    }
+
 }

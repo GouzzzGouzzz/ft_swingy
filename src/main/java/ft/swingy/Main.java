@@ -31,10 +31,7 @@ public class Main
         //GUI
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                GameMapModel map = new GameMapModel(5);
-                HeroDirectorModel director = new HeroDirectorModel();
-                Hero hero = director.makeWarrior(new HeroBuilder(), "Warrior");
-                GameGUI game = new GameGUI(map, hero);
+                GameGUI game = new GameGUI();
             }
         });
 

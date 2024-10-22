@@ -2,6 +2,7 @@ package ft.swingy.GUI;
 
 import javax.swing.*;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -9,8 +10,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import ft.swingy.Game.Direction;
-import ft.swingy.Game.GameMapModel;
 import ft.swingy.Game.GameModel;
+import ft.swingy.Game.LoaderModel;
 import ft.swingy.Game.MoveResult;
 import ft.swingy.Hero.Hero;
 
@@ -22,28 +23,62 @@ public class GameGUI extends JFrame{
     private LogsPanel logs;
     private GameModel game;
     private PopUp popup;
+    private Hero hero;
     private volatile boolean inFight;
 
-    public GameGUI(GameMapModel map, Hero hero) {
-
-        render = new GameRender(map);
-        layeredPane = new JLayeredPane();
-        statsPanel = new StatsPanel();
-        logs = new LogsPanel();
-        layeredPane.setPreferredSize(new Dimension(813, 813));
-        game = new GameModel(hero, map);
-        popup = new PopUp(this);
-
-        //frame
+    public GameGUI() {
         setVisible(false);
         setTitle("Swingy - Dungeon Crawler");
-        setContentPane(layeredPane);
-        setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(813, 813);
         setLocationRelativeTo(null);
         setResizable(false);
         setFocusable(true);
+
+        layeredPane = new JLayeredPane();
+        statsPanel = new StatsPanel(true);
+        logs = new LogsPanel();
+
+        hero = loadOrCreateHero();
+        if (true)
+            return ;
+        game = new GameModel(hero, null);
+        popup = new PopUp(this);
+        game.createaNewMap();
+        render = new GameRender(game.getMap());
+
+        //frame
+
+
+        //GamePane
+        setupGamePane();
+        addGameListener();
+
+        setVisible(true);
+        repaint();
+        gameLoop();
+    }
+
+    private Hero loadOrCreateHero(){
+        StatsPanel stats = new StatsPanel(false);
+        LoaderModel loader = new LoaderModel();
+        HeroList heroList = new HeroList(stats);
+        JScrollPane scroll = new JScrollPane(heroList);
+
+        setLayout(new BorderLayout());
+        stats.setPreferredSize(new Dimension(200, this.getHeight()));
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        add(scroll, BorderLayout.CENTER);
+        add(stats, BorderLayout.WEST);
+        setVisible(true);
+        return null;
+    }
+
+    private void setupGamePane(){
+        layeredPane.setPreferredSize(new Dimension(813, 813));
+        setContentPane(layeredPane);
+        setLayout(null);
         requestFocusInWindow();
 
         //StatsPanel
@@ -62,11 +97,13 @@ public class GameGUI extends JFrame{
 
         //rendering game
         render.setLayout(null);
-        //23 par 23 tiles
+        //around 23 x 23 tiles
         render.setBounds(0, 0, 737, 737);
+    }
 
 
 
+    private void addGameListener(){
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -116,9 +153,6 @@ public class GameGUI extends JFrame{
                 }
             }
         });
-        setVisible(true);
-        repaint();
-        gameLoop();
     }
 
     private void gameLoop(){
@@ -127,7 +161,7 @@ public class GameGUI extends JFrame{
             int choice;
             while (true) {
                 if (isValid() == false){
-                    System.out.println("Invalid frame");
+                    // System.out.println("Invalid frame");
                 }
                 if (game.getMoveStatus() == MoveResult.ENEMY_ENCOUNTER){
                     game.setMoveStatus(MoveResult.INVALID_MOVE);

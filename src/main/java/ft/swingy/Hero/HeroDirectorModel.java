@@ -54,6 +54,8 @@ public class HeroDirectorModel {
             while ((line = fileReader.readLine()) != null) {
                 if (id == 0 && line.contains("Name:")){
                     for (int i = 0; i < 10; i++){
+                        if (line == null)
+                            break;
                         if (line.contains("Name:"))
                             builderB.setName(line.substring(5));
                         if (line.contains("Type:"))
