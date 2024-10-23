@@ -37,8 +37,46 @@ public class HeroDirectorModel {
         return builder.getHero();
     }
 
+    private static void inputStats(String line, String stats, BuilderBean builderB, ArtifactBean artifactB) {
+        switch (stats) {
+            case "Name:":
+                builderB.setName(line.substring(5));
+                break;
+            case "Type:":
+                builderB.setType(line.substring(5));
+                break;
+            case "Level:":
+                builderB.setLevel(Integer.parseInt(line.substring(6)));
+                break;
+            case "Experience:":
+                builderB.setExperience(Integer.parseInt(line.substring(11)));
+                break;
+            case "Attack:":
+                builderB.setAttack(Integer.parseInt(line.substring(7)));
+                break;
+            case "Defense:":
+                builderB.setDefense(Integer.parseInt(line.substring(8)));
+                break;
+            case "HP:":
+                builderB.setHP(Integer.parseInt(line.substring(3)));
+                break;
+            case "Weapon:":
+                artifactB.setWeapon(Integer.parseInt(line.substring(7)));
+                break;
+            case "Armor:":
+                artifactB.setArmor(Integer.parseInt(line.substring(6)));
+                break;
+            case "Helm:":
+                artifactB.setHelm(Integer.parseInt(line.substring(5)));
+                break;
+            default:
+                break;
+        }
+    }
+
     static public Hero loadFromFile(HeroBuilder builder, int id) {
         File file = new File("src/main/java/ft/swingy/save/saves.txt");
+        String statsOrder[] = {"Name:", "Type:", "Level:", "Experience:", "Attack:", "Defense:", "HP:", "Weapon:", "Armor:", "Helm:"};
         String line;
         BuilderBean builderB = new BuilderBean();
         ArtifactBean artifactB = new ArtifactBean();
@@ -52,36 +90,24 @@ public class HeroDirectorModel {
         try {
             BufferedReader fileReader = new BufferedReader(new FileReader(file));
             while ((line = fileReader.readLine()) != null) {
-                if (id == 0 && line.contains("Name:")){
+                if (line.startsWith("Name:")){
                     for (int i = 0; i < 10; i++){
                         if (line == null)
                             break;
-                        if (line.contains("Name:"))
-                            builderB.setName(line.substring(5));
-                        if (line.contains("Type:"))
-                            builderB.setType(line.substring(5));
-                        if (line.contains("Level:"))
-                            builderB.setLevel(Integer.parseInt(line.substring(6)));
-                        if (line.contains("Experience:"))
-                            builderB.setExperience(Integer.parseInt(line.substring(11)));
-                        if (line.contains("Attack:"))
-                            builderB.setAttack(Integer.parseInt(line.substring(7)));
-                        if (line.contains("Defense:"))
-                            builderB.setDefense(Integer.parseInt(line.substring(8)));
-                        if (line.contains("HP:"))
-                            builderB.setHP(Integer.parseInt(line.substring(3)));
-                        if (line.contains("Weapon:"))
-                            artifactB.setWeapon(Integer.parseInt(line.substring(7)));
-                        if (line.contains("Armor:"))
-                            artifactB.setArmor(Integer.parseInt(line.substring(6)));
-                        if (line.contains("Helm:"))
-                            artifactB.setHelm(Integer.parseInt(line.substring(5)));
+                        if (line.startsWith(statsOrder[i])){
+                            inputStats(line, statsOrder[i], builderB, artifactB);
+                        }
+                        else{
+                            break;
+                        }
+                        if (i == 9){
+                            id--;
+                        }
                         line = fileReader.readLine();
                     }
-                    break;
-                }
-                if (line.contains("Name:")){
-                    id--;
+                    if (id == -1){
+                        break;
+                    }
                 }
             }
             fileReader.close();

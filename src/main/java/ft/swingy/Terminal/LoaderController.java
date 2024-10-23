@@ -30,16 +30,16 @@ public class LoaderController {
             return null;
         while (true) {
             id = view.askHeroId();
-            if (id < 0 || id > totalHeroSaved) {
+            if (id < 0 || id >= totalHeroSaved) {
+                view.InvalidId();
+                continue;
+            }
+            hero = model.loadHero(id);
+            if (hero == null) {
                 view.InvalidId();
                 continue;
             }
             break;
-        }
-        hero = model.loadHero(id);
-        if (hero == null) {
-            view.InvalidId();
-            return null;
         }
         view.ValidHeroSave();
         return hero;

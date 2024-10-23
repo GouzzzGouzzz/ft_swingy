@@ -14,7 +14,6 @@ import ft.swingy.Game.GameModel;
 import ft.swingy.Game.MoveResult;
 import ft.swingy.Hero.Hero;
 
-//This contains all GUI components to interact with
 public class GameGUIController extends JFrame{
     private GameRenderVIew render;
     private JLayeredPane layeredPane;

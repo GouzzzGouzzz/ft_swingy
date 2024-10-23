@@ -3,6 +3,7 @@ package ft.swingy.Terminal;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LoaderView {
@@ -19,18 +20,10 @@ public class LoaderView {
         return true;
     }
 
-    private void printHeroStats(BufferedReader reader) {
-        for (int i = 0; i < 9; i++) {
-            try {
-                System.out.println("   |" + reader.readLine());
-            } catch (Exception e) {
-                System.out.println("Error: Could not read save file");
-            }
-        }
-    }
-
     private int heroSaved(boolean print){
         File saveFile;
+        String statsOrder[] = {"Name:", "Type:", "Level:", "Experience:", "Attack:", "Defense:", "HP:", "Weapon:", "Armor:", "Helm:"};
+        ArrayList<String> heroOutput = new ArrayList<String>();
         int id;
 
         id = 0;
@@ -39,10 +32,31 @@ public class LoaderView {
             BufferedReader fileReader = new BufferedReader(new FileReader(saveFile));
             String line;
             while ((line = fileReader.readLine()) != null) {
-                if (line.contains("Name:") && print == true) {
-                    System.out.println(id + " | " + line.substring(5));
-                    printHeroStats(fileReader);
-                    id++;
+                if (line.startsWith("Name:")) {
+                    for (int i = 0; i < 10; i++){
+                        if (line.startsWith(statsOrder[i])){
+                            if (i == 0){
+                                heroOutput.add(id + " -- " + line);
+                            }
+                            else{
+                                heroOutput.add("| " + line);
+                            }
+                        }
+                        else{
+                            heroOutput.clear();
+                            break;
+                        }
+                        if (i == 9){
+                            id++;
+                        }
+                        line = fileReader.readLine();
+                    }
+                    if (print == true){
+                        for (int i = 0; i < heroOutput.size(); i++){
+                            System.out.println(heroOutput.get(i));
+                        }
+                    }
+                    heroOutput.clear();
                 }
             }
             fileReader.close();
