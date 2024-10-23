@@ -97,8 +97,6 @@ public class GameRenderVIew extends JPanel{
             playerY = ((playerY + 31) / 32) * 32;
             init = true;
         }
-        System.out.println("PlayerX: " + playerX + " PlayerY: " + playerY);
-        System.out.println("mapX" + map.getPlayerX() + " mapY" + map.getPlayerY());
         g.drawImage(playerTile, playerX, playerY, null);
         for (int i = 0; i < this.getSize().width; i += 32) {
             for (int j = 0; j < this.getSize().height; j += 32)
@@ -119,11 +117,11 @@ public class GameRenderVIew extends JPanel{
                     g.drawImage(bottomTile, i, j, null);
                 else if (i + 32 >= mapStartX && i < mapStartX && j <= mapStartY && j + 32 >= mapStartY)
                     g.drawImage(topLeftTile, i, j, null);
-                else if (i - 32 <= mapStartX + mapTileSize && i > mapStartX + mapTileSize && j <= mapStartY && j + 32 >= mapStartY)
+                else if (i + 32 >= mapStartX + mapTileSize && i < mapStartX + mapTileSize && j <= mapStartY && j + 32 >= mapStartY)
                     g.drawImage(topRightTile, i, j, null);
                 else if (i + 32 >= mapStartX && i < mapStartX && j - 32 <= mapStartY + mapTileSize && j > mapStartY + mapTileSize)
                     g.drawImage(bottomLeftTile, i, j, null);
-                else if (i - 32 <= mapStartX + mapTileSize && i > mapStartX + mapTileSize && j - 32 <= mapStartY + mapTileSize && j > mapStartY + mapTileSize)
+                else if (i - 32 <= mapStartX + mapTileSize && i > mapStartX + mapTileSize && j - 32 < mapStartY + mapTileSize && j > mapStartY + mapTileSize)
                     g.drawImage(bottomRightTile, i, j, null);
                 else
                     g.drawImage(oobTile, i, j, null);
