@@ -97,7 +97,9 @@ public class GameRenderVIew extends JPanel{
             playerY = ((playerY + 31) / 32) * 32;
             init = true;
         }
-        g.drawImage(playerTile,playerX, playerY, null);
+        System.out.println("PlayerX: " + playerX + " PlayerY: " + playerY);
+        System.out.println("mapX" + map.getPlayerX() + " mapY" + map.getPlayerY());
+        g.drawImage(playerTile, playerX, playerY, null);
         for (int i = 0; i < this.getSize().width; i += 32) {
             for (int j = 0; j < this.getSize().height; j += 32)
             {
@@ -127,6 +129,8 @@ public class GameRenderVIew extends JPanel{
                     g.drawImage(oobTile, i, j, null);
             }
         }
+        revalidate();
+        repaint();
     }
 
     private void drawGrid(Graphics g){

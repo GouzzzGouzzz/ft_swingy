@@ -65,12 +65,13 @@ public class GameGUIController extends JFrame{
         if (heroLoader.getHeroCount() == 0){
             showHeroCreationMenu();
         }
-        if (popup.loadOrCreate() == JOptionPane.NO_OPTION){
+        else if (popup.loadOrCreate() == JOptionPane.NO_OPTION){
             showHeroLoadingMenu();
         }
         else{
             showHeroCreationMenu();
         }
+
     }
 
     public void showHeroCreationMenu(){
@@ -191,6 +192,7 @@ public class GameGUIController extends JFrame{
                 }
                 if (game.getMoveStatus() != MoveResult.INVALID_MOVE){
                     game.incrementTurn();
+                    statsPanel.setStats(game.getHero(), game.getTurn());
                     revalidate();
                     repaint();
                 }
@@ -218,7 +220,6 @@ public class GameGUIController extends JFrame{
                             return ;
                         }
                         else{
-                            inFight = false;
                             logs.setText(game.getCombatLogs());
                             popup.fightWon();
                             game.dropArtifact();
@@ -230,6 +231,7 @@ public class GameGUIController extends JFrame{
                                 game.resetArtifact();
                             }
                             statsPanel.setStats(game.getHero(), game.getTurn());
+                            inFight = false;
                             revalidate();
                             repaint();
                         }
@@ -245,10 +247,9 @@ public class GameGUIController extends JFrame{
                                 return ;
                             }
                             else{
-                                game.dropArtifact();
-                                popup.fightWon();
-                                inFight = false;
                                 logs.setText(game.getCombatLogs());
+                                popup.fightWon();
+                                game.dropArtifact();
                                 if (game.getDropArtifact() != null)
                                 {
                                     if (popup.artifactDrop(game.getDropArtifact()) == JOptionPane.YES_OPTION){
@@ -257,6 +258,9 @@ public class GameGUIController extends JFrame{
                                     game.resetArtifact();
                                 }
                                 statsPanel.setStats(game.getHero(), game.getTurn());
+                                inFight = false;
+                                revalidate();
+                                repaint();
                             }
                         }
                         else{
@@ -271,6 +275,8 @@ public class GameGUIController extends JFrame{
                         game.createaNewMap();
                         render.setNewMap(game.getMap());
                         inFight = false;
+                        revalidate();
+                        repaint();
                     }
                     else{
                         popup.goodbye();
