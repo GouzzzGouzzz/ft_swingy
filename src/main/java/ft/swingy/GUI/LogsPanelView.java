@@ -9,11 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class LogsPanel extends JPanel {
+public class LogsPanelView extends JPanel {
     JTextArea logs;
     JScrollPane scroll;
 
-    public LogsPanel() {
+    public LogsPanelView() {
         setLayout(new BorderLayout());
         logs = new JTextArea();
         scroll = new JScrollPane(logs);

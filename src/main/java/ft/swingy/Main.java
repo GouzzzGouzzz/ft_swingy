@@ -14,7 +14,7 @@ import javax.swing.SwingUtilities;
 
 import ft.swingy.Artifacts.Artifact;
 import ft.swingy.Artifacts.ArtifactDirector;
-import ft.swingy.GUI.GameGUI;
+import ft.swingy.GUI.GameGUIController;
 import ft.swingy.Game.GameModel;
 import ft.swingy.Game.GameMapModel;
 import ft.swingy.Game.LoaderModel;
@@ -35,7 +35,7 @@ public class Main
         else if (args[0].equals("gui")){
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    GameGUI game = new GameGUI();
+                    GameGUIController game = new GameGUIController();
                 }
             });
         }

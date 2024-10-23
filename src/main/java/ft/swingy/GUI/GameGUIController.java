@@ -15,27 +15,20 @@ import ft.swingy.Game.MoveResult;
 import ft.swingy.Hero.Hero;
 
 //This contains all GUI components to interact with
-public class GameGUI extends JFrame{
-    private GameRender render;
+public class GameGUIController extends JFrame{
+    private GameRenderVIew render;
     private JLayeredPane layeredPane;
-    private StatsPanel statsPanel;
-    private LogsPanel logs;
+    private StatsPanelView statsPanel;
+    private LogsPanelView logs;
     private GameModel game;
-    private PopUp popup;
+    private PopUpView popup;
     private Hero hero;
     private volatile boolean inFight;
+    private StatsPanelView statsSelectPanel;
+    private HeroCreationView heroCreation;
+    private HeroLoaderView heroLoader;
 
-    //
-        HeroCreation heroCreation;
-    //
-
-    //
-    private StatsPanel statsSelectPanel;
-    private JScrollPane heroScroll;
-    private HeroList heroList;
-    //
-
-    public GameGUI() {
+    public GameGUIController() {
 
         setVisible(false);
         setTitle("Swingy - Dungeon Crawler");
@@ -46,50 +39,64 @@ public class GameGUI extends JFrame{
         setFocusable(true);
 
         layeredPane = new JLayeredPane();
-        statsPanel = new StatsPanel(true);
-        logs = new LogsPanel();
-        popup = new PopUp(this);
+        statsPanel = new StatsPanelView(true);
+        logs = new LogsPanelView();
+        popup = new PopUpView(this);
         loadOrCreateHero();
     }
 
     public void setHero(Hero hero){
         this.hero = hero;
     }
+    public PopUpView getPopUp(){
+        return popup;
+    }
+
+    public StatsPanelView getStatsSelectPanel(){
+        return statsSelectPanel;
+    }
 
     private void loadOrCreateHero(){
-        statsSelectPanel = new StatsPanel(false);
-        heroList = new HeroList(statsSelectPanel, this);
+        statsSelectPanel = new StatsPanelView(false);
         statsSelectPanel.setPreferredSize(new Dimension(200, this.getHeight()));
-        if (heroList.getHeroCount() == 0){
-            heroCreation = new HeroCreation(statsSelectPanel, this);
-            setLayout(new BorderLayout());
-            add(heroCreation.getButtonPanel(), BorderLayout.CENTER);
-            add(heroCreation.getNamePanel(), BorderLayout.SOUTH);
-            add(statsSelectPanel, BorderLayout.WEST);
+        heroLoader = new HeroLoaderView(this);
+        if (heroLoader.getHeroCount() == 0){
+            showHeroCreationMenu();
         }
         if (popup.loadOrCreate() == JOptionPane.NO_OPTION){
-            heroList = new HeroList(statsSelectPanel, this);
-            heroScroll = new JScrollPane(heroList);
-            setLayout(new BorderLayout());
-            heroScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            heroScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            add(heroScroll, BorderLayout.CENTER);
-            add(statsSelectPanel, BorderLayout.WEST);
+            showHeroLoadingMenu();
         }
         else{
-            heroCreation = new HeroCreation(statsSelectPanel, this);
-            setLayout(new BorderLayout());
-            add(heroCreation.getButtonPanel(), BorderLayout.CENTER);
-            add(heroCreation.getNamePanel(), BorderLayout.SOUTH);
-            add(statsSelectPanel, BorderLayout.WEST);
+            showHeroCreationMenu();
         }
         setVisible(true);
+    }
+
+    public void showHeroCreationMenu(){
+        heroCreation = new HeroCreationView(this);
+        setLayout(new BorderLayout());
+        add(heroCreation.getButtonPanel(), BorderLayout.CENTER);
+        add(heroCreation.getNamePanel(), BorderLayout.SOUTH);
+        add(statsSelectPanel, BorderLayout.WEST);
+    }
+
+    public void showHeroLoadingMenu(){
+        add(heroLoader.getHeroScroll(), BorderLayout.CENTER);
+        add(statsSelectPanel, BorderLayout.WEST);
+    }
+
+    public void removeLoadingMenu(){
+        heroLoader.removeLoadingMenu();
+    }
+
+    public void removeHeroCreationMenu(){
+        heroCreation.removeHeroCreationMenu();
     }
 
     public void startGame(){
         game = new GameModel(hero, null);
         game.createaNewMap();
-        render = new GameRender(game.getMap());
+        render = new GameRenderVIew(game.getMap());
         //GamePane
         setupGamePane();
         addGameListener();
@@ -97,21 +104,6 @@ public class GameGUI extends JFrame{
         revalidate();
         repaint();
         gameLoop();
-    }
-
-    public void removeLoadingMenu(){
-        remove(statsSelectPanel);
-        remove(heroScroll);
-        revalidate();
-        repaint();
-    }
-
-    public void removeHeroCreationMenu(){
-        remove(statsSelectPanel);
-        remove(heroCreation.getButtonPanel());
-        remove(heroCreation.getNamePanel());
-        revalidate();
-        repaint();
     }
 
     public void setupGamePane(){
@@ -198,7 +190,6 @@ public class GameGUI extends JFrame{
     private void gameLoop(){
         inFight = false;
         new Thread(() -> {
-            int choice;
             statsPanel.setStats(game.getHero(), game.getTurn());
             while (true) {
                 if (isValid() == false){
@@ -207,12 +198,13 @@ public class GameGUI extends JFrame{
                 if (game.getMoveStatus() == MoveResult.ENEMY_ENCOUNTER){
                     game.setMoveStatus(MoveResult.INVALID_MOVE);
                     inFight = true;
-                    choice = popup.enemyEncounter();
-                    if (choice == JOptionPane.YES_OPTION){
+                    if (popup.enemyEncounter() == JOptionPane.YES_OPTION){
                         if (game.playerFight() == false){
                             logs.setText(game.getCombatLogs());
                             statsPanel.setStats(game.getHero(), game.getTurn());
                             popup.gameOver();
+                            game.getHero().deleteSave();
+                            dispose();
                             return ;
                         }
                         else{
@@ -222,8 +214,7 @@ public class GameGUI extends JFrame{
                             game.dropArtifact();
                             if (game.getDropArtifact() != null)
                             {
-                                choice = popup.artifactDrop(game.getDropArtifact());
-                                if (choice == JOptionPane.YES_OPTION){
+                                if (popup.artifactDrop(game.getDropArtifact()) == JOptionPane.YES_OPTION){
                                     game.getHero().equipArtifact(game.getDropArtifact());
                                 }
                                 game.resetArtifact();
@@ -237,6 +228,8 @@ public class GameGUI extends JFrame{
                                 logs.setText(game.getCombatLogs());
                                 statsPanel.setStats(game.getHero(), game.getTurn());
                                 popup.gameOver();
+                                game.getHero().deleteSave();
+                                dispose();
                                 return ;
                             }
                             else{
@@ -246,8 +239,7 @@ public class GameGUI extends JFrame{
                                 logs.setText(game.getCombatLogs());
                                 if (game.getDropArtifact() != null)
                                 {
-                                    choice = popup.artifactDrop(game.getDropArtifact());
-                                    if (choice == JOptionPane.YES_OPTION){
+                                    if (popup.artifactDrop(game.getDropArtifact()) == JOptionPane.YES_OPTION){
                                         game.getHero().equipArtifact(game.getDropArtifact());
                                     }
                                     game.resetArtifact();
@@ -259,6 +251,19 @@ public class GameGUI extends JFrame{
                             inFight = false;
                             popup.runAway();
                         }
+                    }
+                }
+                if (game.playerWon() && game.getMoveStatus() != MoveResult.ENEMY_ENCOUNTER){
+                    game.saveGame();
+                    if (popup.continuePlaying() == JOptionPane.YES_OPTION){
+                        game.createaNewMap();
+                        render.setNewMap(game.getMap());
+                        inFight = false;
+                    }
+                    else{
+                        popup.goodbye();
+                        dispose();
+                        return ;
                     }
                 }
                 Thread.yield();

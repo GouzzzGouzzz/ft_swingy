@@ -8,10 +8,10 @@ import javax.swing.JOptionPane;
 import ft.swingy.Artifacts.Artifact;
 
 
-public class PopUp extends JOptionPane{
+public class PopUpView extends JOptionPane{
     JFrame frame;
 
-    public PopUp(JFrame parentFrame) {
+    public PopUpView(JFrame parentFrame) {
         setBackground(Color.GRAY);
         frame = parentFrame;
     }
@@ -35,7 +35,7 @@ public class PopUp extends JOptionPane{
 
     public int artifactDrop(Artifact artifact){
         int choice = 0;
-        choice = showConfirmDialog(frame, "You have found an artifact for " + artifact.getType() + "of quality " + artifact.getQuality() + "\nDo you want to equip it?",
+        choice = showConfirmDialog(frame, "You have found an artifact for " + artifact.getType() + " of quality " + artifact.getQuality() + "\nDo you want to equip it?",
         "ARTIFACT FOUND", JOptionPane.YES_NO_OPTION);
         return choice;
     }
@@ -43,6 +43,23 @@ public class PopUp extends JOptionPane{
     public void runAway(){
         showMessageDialog(frame, "You have successfully ran away from the enemy!",
         "RUN AWAY", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void invalidHero(){
+        showMessageDialog(frame, "This hero is invalid !",
+        "INVALID HERO", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void goodbye(){
+        showMessageDialog(frame, "Goodbye !",
+        "GOODBYE", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public int continuePlaying(){
+        int choice = 0;
+        choice = showConfirmDialog(frame, "You won !, continue to the next level or leave here ?",
+        "YOU WON", JOptionPane.YES_NO_OPTION);
+        return choice;
     }
 
     public int loadOrCreate(){

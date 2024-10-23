@@ -10,7 +10,7 @@ import ft.swingy.Game.GameMapModel;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class GameRender extends JPanel{
+public class GameRenderVIew extends JPanel{
     private BufferedImage tileset;
     private int mapStartX;
     private int mapStartY;
@@ -23,7 +23,7 @@ public class GameRender extends JPanel{
     private boolean init;
     public boolean inFight;
 
-    public GameRender(GameMapModel map) {
+    public GameRenderVIew(GameMapModel map) {
         this.map = map;
         mapTileSize = map.getSize() * 32;
         init = false;
@@ -33,6 +33,16 @@ public class GameRender extends JPanel{
         catch (Exception e) {
             System.out.println("ERROR\n");
         }
+    }
+
+    public void setNewMap(GameMapModel map){
+        this.map = map;
+        mapTileSize = map.getSize() * 32;
+        init = false;
+        mapOffsetX = 0;
+        mapOffsetY = 0;
+        revalidate();
+        repaint();
     }
 
     public void movePlayer(int key){

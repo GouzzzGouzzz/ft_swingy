@@ -7,33 +7,33 @@ import javax.swing.JPanel;
 
 import ft.swingy.Hero.Hero;
 
-public class StatsPanel extends JPanel{
-    CustomLabel name;
-    CustomLabel type;
-    CustomLabel level;
-    CustomLabel experience;
-    CustomLabel attack;
-    CustomLabel defense;
-    CustomLabel hitPoints;
-    CustomLabel weapon;
-    CustomLabel armor;
-    CustomLabel helm;
-    CustomLabel turn;
+public class StatsPanelView extends JPanel{
+    CustomLabelView name;
+    CustomLabelView type;
+    CustomLabelView level;
+    CustomLabelView experience;
+    CustomLabelView attack;
+    CustomLabelView defense;
+    CustomLabelView hitPoints;
+    CustomLabelView weapon;
+    CustomLabelView armor;
+    CustomLabelView helm;
+    CustomLabelView turn;
     boolean showTurn;
 
-    public StatsPanel(boolean showTurn) {
+    public StatsPanelView(boolean showTurn) {
         this.showTurn = showTurn;
         setLayout(new GridLayout(11, 1));
-        name = new CustomLabel("Name: ");
-        type = new CustomLabel("Type: ");
-        level = new CustomLabel("Level: ");
-        experience = new CustomLabel("Experience: ");
-        attack = new CustomLabel("Attack: ");
-        defense = new CustomLabel("Defense: ");
-        hitPoints = new CustomLabel("HP: ");
-        weapon = new CustomLabel("Weapon: ");
-        armor = new CustomLabel("Armor: ");
-        helm = new CustomLabel("Helm: ");
+        name = new CustomLabelView("Name: ");
+        type = new CustomLabelView("Type: ");
+        level = new CustomLabelView("Level: ");
+        experience = new CustomLabelView("Experience: ");
+        attack = new CustomLabelView("Attack: ");
+        defense = new CustomLabelView("Defense: ");
+        hitPoints = new CustomLabelView("HP: ");
+        weapon = new CustomLabelView("Weapon: ");
+        armor = new CustomLabelView("Armor: ");
+        helm = new CustomLabelView("Helm: ");
         add(name);
         add(type);
         add(level);
@@ -45,7 +45,7 @@ public class StatsPanel extends JPanel{
         add(armor);
         add(helm);
         if (showTurn){
-            turn = new CustomLabel("Turn: ");
+            turn = new CustomLabelView("Turn: ");
             add(turn);
         }
         setBackground(Color.GRAY);

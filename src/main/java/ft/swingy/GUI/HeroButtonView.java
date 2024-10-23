@@ -10,13 +10,13 @@ import java.awt.event.ActionEvent;
 import ft.swingy.Game.LoaderModel;
 import ft.swingy.Hero.Hero;
 
-public class HeroButton extends JButton{
+public class HeroButtonView extends JButton{
     int id;
-    StatsPanel statsPanel;
+    GameGUIController root;
 
-    public HeroButton(int id, StatsPanel statsPanel, GameGUI root) {
+    public HeroButtonView(int id , GameGUIController root) {
         this.id = id;
-        this.statsPanel = statsPanel;
+        this.root = root;
         setPreferredSize(new Dimension(200, 50));
         setMaximumSize(new Dimension(200, 50));
         setAlignmentX(CENTER_ALIGNMENT);
@@ -38,6 +38,8 @@ public class HeroButton extends JButton{
                     root.removeLoadingMenu();
                     root.startGame();
                 }
+                else
+                    root.getPopUp().invalidHero();
             }
         });
     }
@@ -46,9 +48,9 @@ public class HeroButton extends JButton{
         LoaderModel loader = new LoaderModel();
         Hero hero = loader.loadHero(id);
         if (hero == null){
-            statsPanel.setCorruptedSave();
+            root.getStatsSelectPanel().setCorruptedSave();
             return ;
         }
-        statsPanel.setStats(hero, 0);
+        root.getStatsSelectPanel().setStats(hero, 0);
     }
 }
