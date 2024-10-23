@@ -60,10 +60,11 @@ public class GameRenderVIew extends JPanel{
                 mapOffsetX += 32;
                 break;
             case KeyEvent.VK_D:
-                mapOffsetX -= 32;
                 mapStartX -= 32;
+                mapOffsetX -= 32;
                 break;
         }
+        revalidate();
         repaint();
     }
 

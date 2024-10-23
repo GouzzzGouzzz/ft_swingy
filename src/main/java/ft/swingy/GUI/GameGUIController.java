@@ -59,6 +59,9 @@ public class GameGUIController extends JFrame{
         statsSelectPanel = new StatsPanelView(false);
         statsSelectPanel.setPreferredSize(new Dimension(200, this.getHeight()));
         heroLoader = new HeroLoaderView(this);
+        setVisible(true);
+        revalidate();
+        repaint();
         if (heroLoader.getHeroCount() == 0){
             showHeroCreationMenu();
         }
@@ -68,7 +71,6 @@ public class GameGUIController extends JFrame{
         else{
             showHeroCreationMenu();
         }
-        setVisible(true);
     }
 
     public void showHeroCreationMenu(){
@@ -77,19 +79,27 @@ public class GameGUIController extends JFrame{
         add(heroCreation.getButtonPanel(), BorderLayout.CENTER);
         add(heroCreation.getNamePanel(), BorderLayout.SOUTH);
         add(statsSelectPanel, BorderLayout.WEST);
+        revalidate();
+        repaint();
     }
 
     public void showHeroLoadingMenu(){
         add(heroLoader.getHeroScroll(), BorderLayout.CENTER);
         add(statsSelectPanel, BorderLayout.WEST);
+        revalidate();
+        repaint();
     }
 
     public void removeLoadingMenu(){
         heroLoader.removeLoadingMenu();
+        revalidate();
+        repaint();
     }
 
     public void removeHeroCreationMenu(){
         heroCreation.removeHeroCreationMenu();
+        revalidate();
+        repaint();
     }
 
     public void startGame(){
@@ -181,9 +191,13 @@ public class GameGUIController extends JFrame{
                 }
                 if (game.getMoveStatus() != MoveResult.INVALID_MOVE){
                     game.incrementTurn();
+                    revalidate();
+                    repaint();
                 }
             }
         });
+        revalidate();
+        repaint();
     }
 
     private void gameLoop(){
@@ -191,9 +205,6 @@ public class GameGUIController extends JFrame{
         new Thread(() -> {
             statsPanel.setStats(game.getHero(), game.getTurn());
             while (true) {
-                if (isValid() == false){
-                    // System.out.println("Invalid frame");
-                }
                 if (game.getMoveStatus() == MoveResult.ENEMY_ENCOUNTER){
                     game.setMoveStatus(MoveResult.INVALID_MOVE);
                     inFight = true;
@@ -219,6 +230,8 @@ public class GameGUIController extends JFrame{
                                 game.resetArtifact();
                             }
                             statsPanel.setStats(game.getHero(), game.getTurn());
+                            revalidate();
+                            repaint();
                         }
                     }
                     else{
