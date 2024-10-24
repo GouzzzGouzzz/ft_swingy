@@ -262,7 +262,7 @@ public class Hero {
         } catch (IOException e) {
             System.out.println("Error occurred while saving stats: " + e.getMessage());
         }
-        if (skip == -1) // new hero
+        if (skip == -1)
             addStatsToList(lines);
         try {
             FileWriter writer = new FileWriter(file);
@@ -287,7 +287,7 @@ public class Hero {
                     skip--;
                     continue;
                 }
-                if (line.contains(this.name) && skip == -1){
+                if (line.startsWith(this.name) && skip == -1){
                     skip = 9;
                     continue;
                 }
