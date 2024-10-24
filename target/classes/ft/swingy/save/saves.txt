@@ -1,0 +1,16 @@
+Name:asd
+Type:Rogue
+Level:1
+Experience:350
+Attack:94
+Defense:15
+HP:50
+Weapon:19
+Armor:0
+Helm:0
+L312ad3xwperience:0asd
+Ataswadack:75
+Defaapon:0
+Armo1231r:0
+H312elm:0
+d

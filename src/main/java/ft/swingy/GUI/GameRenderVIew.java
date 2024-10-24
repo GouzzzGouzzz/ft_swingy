@@ -107,22 +107,22 @@ public class GameRenderVIew extends JPanel{
                     else if (map.getAt((i - mapStartX) / 32, (j - mapStartY) / 32) == ID.Empty.getId())
                         g.drawImage(mapTile, i, j, null);
                 }
-                else if (i + 32 >= mapStartX && i < mapStartX && j >= mapStartY && j < mapStartY + mapTileSize)
-                    g.drawImage(leftTile, i, j, null);
-                else if (j + 32 >= mapStartY && j < mapStartY && i >= mapStartX && i < mapStartX + mapTileSize)
-                    g.drawImage(topTile, i, j, null);
-                else if (i - 32 >= mapStartX && i < mapStartX + mapTileSize + 32 && j >= mapStartY && j < mapStartY + mapTileSize)
-                    g.drawImage(rightTile, i, j, null);
-                else if (j - 32 >= mapStartY && j < mapStartY + mapTileSize + 32 && i >= mapStartX && i < mapStartX + mapTileSize)
-                    g.drawImage(bottomTile, i, j, null);
-                else if (i + 32 >= mapStartX && i < mapStartX && j <= mapStartY && j + 32 >= mapStartY)
-                    g.drawImage(topLeftTile, i, j, null);
-                else if (i + 32 >= mapStartX + mapTileSize && i < mapStartX + mapTileSize && j <= mapStartY && j + 32 >= mapStartY)
-                    g.drawImage(topRightTile, i, j, null);
-                else if (i + 32 >= mapStartX && i < mapStartX && j - 32 <= mapStartY + mapTileSize && j > mapStartY + mapTileSize)
-                    g.drawImage(bottomLeftTile, i, j, null);
-                else if (i - 32 <= mapStartX + mapTileSize && i > mapStartX + mapTileSize && j - 32 < mapStartY + mapTileSize && j > mapStartY + mapTileSize)
-                    g.drawImage(bottomRightTile, i, j, null);
+                // else if (i + 32 >= mapStartX && i < mapStartX && j >= mapStartY && j < mapStartY + mapTileSize)
+                //     g.drawImage(leftTile, i, j, null);
+                // else if (j + 32 >= mapStartY && j < mapStartY && i >= mapStartX && i < mapStartX + mapTileSize)
+                //     g.drawImage(topTile, i, j, null);
+                // else if (i - 32 >= mapStartX && i < mapStartX + mapTileSize + 32 && j >= mapStartY && j < mapStartY + mapTileSize)
+                //     g.drawImage(rightTile, i, j, null);
+                // else if (j - 32 >= mapStartY && j < mapStartY + mapTileSize + 32 && i >= mapStartX && i < mapStartX + mapTileSize)
+                //     g.drawImage(bottomTile, i, j, null);
+                // else if (i + 32 >= mapStartX && i < mapStartX && j <= mapStartY && j + 32 >= mapStartY)
+                //     g.drawImage(topLeftTile, i, j, null);
+                // else if (i + 32 >= mapStartX + mapTileSize && i < mapStartX + mapTileSize && j <= mapStartY && j + 32 >= mapStartY)
+                //     g.drawImage(topRightTile, i, j, null);
+                // else if (i + 32 >= mapStartX && i < mapStartX && j - 32 <= mapStartY + mapTileSize && j > mapStartY + mapTileSize)
+                //     g.drawImage(bottomLeftTile, i, j, null);
+                // else if (i - 32 <= mapStartX + mapTileSize && i > mapStartX + mapTileSize && j - 32 < mapStartY + mapTileSize && j > mapStartY + mapTileSize)
+                //     g.drawImage(bottomRightTile, i, j, null);
                 else
                     g.drawImage(oobTile, i, j, null);
             }
