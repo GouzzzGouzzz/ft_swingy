@@ -78,14 +78,14 @@ public class GameRenderVIew extends JPanel{
         final BufferedImage oobTile = getTile(Tiles.WATER.getPos());
         final BufferedImage playerTile = getTile(Tiles.PLAYER.getPos());
         final BufferedImage enemyTile = getTile(Tiles.ENEMY.getPos());
-        final BufferedImage topTile = getTile(Tiles.TOP.getPos());
-        final BufferedImage bottomTile = getTile(Tiles.BOTTOM.getPos());
-        final BufferedImage leftTile = getTile(Tiles.LEFT.getPos());
-        final BufferedImage rightTile = getTile(Tiles.RIGHT.getPos());
-        final BufferedImage topLeftTile = getTile(Tiles.TOPLEFT.getPos());
-        final BufferedImage topRightTile = getTile(Tiles.TOPRIGHT.getPos());
-        final BufferedImage bottomLeftTile = getTile(Tiles.BOTTOMLEFT.getPos());
-        final BufferedImage bottomRightTile = getTile(Tiles.BOTTOMRIGHT.getPos());
+        // final BufferedImage topTile = getTile(Tiles.TOP.getPos());
+        // final BufferedImage bottomTile = getTile(Tiles.BOTTOM.getPos());
+        // final BufferedImage leftTile = getTile(Tiles.LEFT.getPos());
+        // final BufferedImage rightTile = getTile(Tiles.RIGHT.getPos());
+        // final BufferedImage topLeftTile = getTile(Tiles.TOPLEFT.getPos());
+        // final BufferedImage topRightTile = getTile(Tiles.TOPRIGHT.getPos());
+        // final BufferedImage bottomLeftTile = getTile(Tiles.BOTTOMLEFT.getPos());
+        // final BufferedImage bottomRightTile = getTile(Tiles.BOTTOMRIGHT.getPos());
 
         if (!init){
             mapStartX = (this.getSize().width - mapTileSize) / 2;

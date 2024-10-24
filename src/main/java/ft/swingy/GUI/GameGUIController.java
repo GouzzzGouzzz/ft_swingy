@@ -19,16 +19,16 @@ public class GameGUIController extends JFrame{
     private JLayeredPane layeredPane;
     private StatsPanelView statsPanel;
     private LogsPanelView logs;
-    private GameModel game;
     private PopUpView popup;
     private Hero hero;
-    private volatile boolean inFight;
     private StatsPanelView statsSelectPanel;
     private HeroCreationView heroCreation;
     private HeroLoaderView heroLoader;
+    private GameModel game;
+    private volatile boolean inFight;
+    private volatile boolean renderTime;
 
     public GameGUIController() {
-
         setVisible(false);
         setTitle("Swingy - Dungeon Crawler");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,7 +36,7 @@ public class GameGUIController extends JFrame{
         setLocationRelativeTo(null);
         setResizable(false);
         setFocusable(true);
-
+        renderTime = false;
         layeredPane = new JLayeredPane();
         statsPanel = new StatsPanelView(true);
         logs = new LogsPanelView();
@@ -71,7 +71,6 @@ public class GameGUIController extends JFrame{
         else{
             showHeroCreationMenu();
         }
-
     }
 
     public void showHeroCreationMenu(){
@@ -162,8 +161,9 @@ public class GameGUIController extends JFrame{
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (inFight == true)
+                if (inFight == true || renderTime == true)
                     return ;
+                renderTime = true;
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W:
                         game.movePlayer(Direction.UP);
@@ -176,19 +176,19 @@ public class GameGUIController extends JFrame{
                         if (game.getMoveStatus() != MoveResult.INVALID_MOVE) {
                             render.movePlayer(KeyEvent.VK_S);
                         }
-                    break;
+                        break;
                     case KeyEvent.VK_A:
                         game.movePlayer(Direction.LEFT);
                         if (game.getMoveStatus() != MoveResult.INVALID_MOVE) {
                             render.movePlayer(KeyEvent.VK_A);
                         }
-                    break;
+                        break;
                     case KeyEvent.VK_D:
                         game.movePlayer(Direction.RIGHT);
                         if (game.getMoveStatus() != MoveResult.INVALID_MOVE) {
                             render.movePlayer(KeyEvent.VK_D);
                         }
-                    break;
+                        break;
                 }
                 if (game.getMoveStatus() != MoveResult.INVALID_MOVE){
                     game.incrementTurn();
@@ -196,71 +196,84 @@ public class GameGUIController extends JFrame{
                     revalidate();
                     repaint();
                 }
+                renderTime = false;
             }
         });
         revalidate();
         repaint();
     }
 
+    private void handleDropArtifact(){
+        logs.setText(game.getCombatLogs());
+        popup.fightWon();
+        game.dropArtifact();
+        if (game.getDropArtifact() != null)
+        {
+            if (popup.artifactDrop(game.getDropArtifact()) == JOptionPane.YES_OPTION){
+                game.getHero().equipArtifact(game.getDropArtifact());
+            }
+            game.resetArtifact();
+        }
+        statsPanel.setStats(game.getHero(), game.getTurn());
+        inFight = false;
+        revalidate();
+        repaint();
+    }
+
+    private void handlePlayerWin(){
+        game.saveGame();
+        if (popup.continuePlaying() == JOptionPane.YES_OPTION){
+            game.createaNewMap();
+            render.setNewMap(game.getMap());
+            inFight = false;
+            revalidate();
+            repaint();
+        }
+        else{
+            popup.goodbye();
+            dispose();
+        }
+    }
+
+    private void handlePlayerLost(){
+        logs.setText(game.getCombatLogs());
+        statsPanel.setStats(game.getHero(), game.getTurn());
+        popup.gameOver();
+        game.getHero().deleteSave();
+        dispose();
+    }
+
     private void gameLoop(){
         inFight = false;
         new Thread(() -> {
+            MoveResult moveStatus = MoveResult.INVALID_MOVE;
+            boolean result;
             statsPanel.setStats(game.getHero(), game.getTurn());
             while (true) {
-                if (game.getMoveStatus() == MoveResult.ENEMY_ENCOUNTER){
-                    game.setMoveStatus(MoveResult.INVALID_MOVE);
+                moveStatus = game.getMoveStatus();
+                if (moveStatus == MoveResult.ENEMY_ENCOUNTER && renderTime == false){
                     inFight = true;
+                    game.setMoveStatus(MoveResult.INVALID_MOVE);
                     if (popup.enemyEncounter() == JOptionPane.YES_OPTION){
-                        if (game.playerFight() == false){
-                            logs.setText(game.getCombatLogs());
-                            statsPanel.setStats(game.getHero(), game.getTurn());
-                            popup.gameOver();
-                            game.getHero().deleteSave();
-                            dispose();
+                        result = game.playerFight();
+                        if (result == false){
+                            handlePlayerLost();
                             return ;
                         }
                         else{
-                            logs.setText(game.getCombatLogs());
-                            popup.fightWon();
-                            game.dropArtifact();
-                            if (game.getDropArtifact() != null)
-                            {
-                                if (popup.artifactDrop(game.getDropArtifact()) == JOptionPane.YES_OPTION){
-                                    game.getHero().equipArtifact(game.getDropArtifact());
-                                }
-                                game.resetArtifact();
-                            }
-                            statsPanel.setStats(game.getHero(), game.getTurn());
-                            inFight = false;
-                            revalidate();
-                            repaint();
+                            handleDropArtifact();
                         }
                     }
                     else{
-                        if (game.playerTryToRun() == false){
-                            if (game.playerFight() == false){
-                                logs.setText(game.getCombatLogs());
-                                statsPanel.setStats(game.getHero(), game.getTurn());
-                                popup.gameOver();
-                                game.getHero().deleteSave();
-                                dispose();
+                        result = game.playerTryToRun();
+                        if (result == false){
+                            result = game.playerFight();
+                            if (result == false){
+                                handlePlayerLost();
                                 return ;
                             }
                             else{
-                                logs.setText(game.getCombatLogs());
-                                popup.fightWon();
-                                game.dropArtifact();
-                                if (game.getDropArtifact() != null)
-                                {
-                                    if (popup.artifactDrop(game.getDropArtifact()) == JOptionPane.YES_OPTION){
-                                        game.getHero().equipArtifact(game.getDropArtifact());
-                                    }
-                                    game.resetArtifact();
-                                }
-                                statsPanel.setStats(game.getHero(), game.getTurn());
-                                inFight = false;
-                                revalidate();
-                                repaint();
+                                handleDropArtifact();
                             }
                         }
                         else{
@@ -270,19 +283,7 @@ public class GameGUIController extends JFrame{
                     }
                 }
                 if (game.playerWon() && game.getMoveStatus() != MoveResult.ENEMY_ENCOUNTER){
-                    game.saveGame();
-                    if (popup.continuePlaying() == JOptionPane.YES_OPTION){
-                        game.createaNewMap();
-                        render.setNewMap(game.getMap());
-                        inFight = false;
-                        revalidate();
-                        repaint();
-                    }
-                    else{
-                        popup.goodbye();
-                        dispose();
-                        return ;
-                    }
+                    handlePlayerWin();
                 }
                 Thread.yield();
             }
