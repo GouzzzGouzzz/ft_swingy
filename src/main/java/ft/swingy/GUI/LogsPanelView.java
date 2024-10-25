@@ -25,6 +25,7 @@ public class LogsPanelView extends JPanel {
         logs.setBackground(Color.GRAY);
         logs.setForeground(Color.WHITE);
         logs.setOpaque(true);
+        logs.setFocusable(false);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scroll, BorderLayout.CENTER);

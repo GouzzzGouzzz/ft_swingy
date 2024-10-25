@@ -287,7 +287,7 @@ public class Hero {
                     skip--;
                     continue;
                 }
-                if (line.startsWith(this.name) && skip == -1){
+                if (line.contains(this.name) && skip == -1){
                     skip = 9;
                     continue;
                 }

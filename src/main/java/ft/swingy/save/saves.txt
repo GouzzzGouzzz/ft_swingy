@@ -1,0 +1,10 @@
+Name:asdwasd
+Type:Rogue
+Level:1
+Experience:700
+Attack:75
+Defense:34
+HP:50
+Weapon:0
+Armor:19
+Helm:0

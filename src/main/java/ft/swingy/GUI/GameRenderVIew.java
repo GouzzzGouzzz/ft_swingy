@@ -21,7 +21,6 @@ public class GameRenderVIew extends JPanel{
     private int mapTileSize;
     private GameMapModel map;
     private boolean init;
-    public boolean inFight;
 
     public GameRenderVIew(GameMapModel map) {
         this.map = map;

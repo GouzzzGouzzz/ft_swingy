@@ -139,25 +139,12 @@ public class GameGUIController extends JFrame{
         //rendering game
         render.setLayout(null);
         //around 23 x 23 tiles
-        render.setBounds(0, 0, 737, 737);
+        render.setBounds(0, 0, 813, 813);
         revalidate();
         repaint();
     }
 
     private void addGameListener(){
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                // board.setBounds(0, 0, getWidth()-76, getHeight()-76);
-                // board.updateGUIOnResize();
-
-                // System.out.println("Resized" + e.getComponent().getSize());
-                setSize(813, 813);
-                revalidate();
-                repaint();
-            }
-        });
-
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
