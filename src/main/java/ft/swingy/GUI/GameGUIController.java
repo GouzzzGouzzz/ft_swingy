@@ -126,7 +126,7 @@ public class GameGUIController extends JFrame{
         statsPanel.setBounds(0, 0, 200, 250);
 
         //Logs
-        logs.setBounds(0, 516, 300, 200);
+        logs.setBounds(0, 580, 300, 200);
 
         //adding to layeredPane
         layeredPane.add(render, JLayeredPane.DEFAULT_LAYER);

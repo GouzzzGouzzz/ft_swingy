@@ -1,10 +1,10 @@
-Name:asdwasd
+Name:asdwa
 Type:Rogue
-Level:1
-Experience:700
-Attack:75
-Defense:34
-HP:50
+Level:3
+Experience:2950
+Attack:105
+Defense:35
+HP:250
 Weapon:0
-Armor:19
+Armor:0
 Helm:0
