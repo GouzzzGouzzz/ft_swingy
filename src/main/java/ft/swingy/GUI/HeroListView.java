@@ -13,7 +13,7 @@ public class HeroListView extends JPanel{
     public HeroListView(GameGUIController root) {
         File saveFile = new File("src/main/java/ft/swingy/save/saves.txt");
         int id = 0;
-        String statsOrder[] = {"Name:", "Type:", "Level:", "Experience:", "Attack:", "Defense:", "HP:", "Weapon:", "Armor:", "Helm:"};
+        String[] statsOrder = {"Name:", "Type:", "Level:", "Experience:", "Attack:", "Defense:", "HP:", "Weapon:", "Armor:", "Helm:"};
         boolean skip = false;
         String name;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -28,7 +28,8 @@ public class HeroListView extends JPanel{
                             skip = true;
                             break;
                         }
-                        line = fileReader.readLine();
+                        if (i != 9)
+                            line = fileReader.readLine();
                     }
                     if (skip == false){
                         HeroButtonView heroButton = new HeroButtonView(id, root);
@@ -47,6 +48,7 @@ public class HeroListView extends JPanel{
     }
 
     public int getHeroCount(){
+        System.out.println("FOUND: " + heroSaved);
         return heroSaved;
     }
 }

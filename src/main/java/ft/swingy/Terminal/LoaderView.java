@@ -14,15 +14,12 @@ public class LoaderView {
     }
 
     public boolean askToLoad(){
-        if(UserInput.askYesOrNo(read, "Do you want to load a hero ? (y/n)") == false){
-            return false;
-        }
-        return true;
+        return UserInput.askYesOrNo(read, "Do you want to load a hero ? (y/n)");
     }
 
     private int heroSaved(boolean print){
         File saveFile;
-        String statsOrder[] = {"Name:", "Type:", "Level:", "Experience:", "Attack:", "Defense:", "HP:", "Weapon:", "Armor:", "Helm:"};
+        String[] statsOrder = {"Name:", "Type:", "Level:", "Experience:", "Attack:", "Defense:", "HP:", "Weapon:", "Armor:", "Helm:"};
         ArrayList<String> heroOutput = new ArrayList<String>();
         int id;
 
@@ -48,6 +45,7 @@ public class LoaderView {
                         }
                         if (i == 9){
                             id++;
+                            break;
                         }
                         line = fileReader.readLine();
                     }
