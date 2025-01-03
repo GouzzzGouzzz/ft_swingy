@@ -31,7 +31,7 @@ public class HeroListView extends JPanel{
                         if (i != 9)
                             line = fileReader.readLine();
                     }
-                    if (skip == false){
+                    if (!skip){
                         HeroButtonView heroButton = new HeroButtonView(id, root);
                         heroButton.setText(name);
                         id++;

@@ -5,9 +5,9 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 
 public class HeroLoaderView {
-    private JScrollPane heroScroll;
-    private HeroListView heroList;
-    private GameGUIController root;
+    private final JScrollPane heroScroll;
+    private final HeroListView heroList;
+    private final GameGUIController root;
 
     public HeroLoaderView(GameGUIController root){
         this.root = root;

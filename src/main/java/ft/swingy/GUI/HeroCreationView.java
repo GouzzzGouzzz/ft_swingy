@@ -21,15 +21,15 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
 public class HeroCreationView {
-    private JTextField heroName;
-    private JPanel buttonPanel;
-    private JPanel namePanel;
-    private JButton rogue;
-    private JButton warrior;
-    private JButton confirm;
-    private GameGUIController root;
+    private final JTextField heroName;
+    private final JPanel buttonPanel;
+    private final JPanel namePanel;
+    private final JButton rogue;
+    private final JButton warrior;
+    private final JButton confirm;
+    private final GameGUIController root;
     private int classId;
-    private CustomLabelView selectedClass;
+    private final CustomLabelView selectedClass;
 
     public HeroCreationView(GameGUIController root){
         this.root = root;

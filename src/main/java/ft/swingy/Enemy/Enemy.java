@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Enemy {
     private int hitPoints;
-    private int attack;
-    private int defense;
-    private int level;
-    private int xp;
+    private final int attack;
+    private final int defense;
+    private final int level;
+    private final int xp;
 
     public Enemy(int level) {
         this.level = level;

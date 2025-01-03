@@ -16,10 +16,10 @@ public enum Tiles {
     WATER(224, 32, 32, 32),
     ENEMY(320, 192, 32, 32);
 
-    private int row;
-    private int col;
-    private int x;
-    private int y;
+    private final int row;
+    private final int col;
+    private final int x;
+    private final int y;
 
     Tiles(int col, int row, int x, int y) {
         this.col = col;

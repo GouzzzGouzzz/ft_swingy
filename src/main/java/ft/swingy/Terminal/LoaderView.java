@@ -49,7 +49,7 @@ public class LoaderView {
                         }
                         line = fileReader.readLine();
                     }
-                    if (print == true){
+                    if (print){
                         for (int i = 0; i < heroOutput.size(); i++){
                             System.out.println(heroOutput.get(i));
                         }

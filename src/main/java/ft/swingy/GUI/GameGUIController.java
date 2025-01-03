@@ -16,10 +16,10 @@ import ft.swingy.Hero.Hero;
 
 public class GameGUIController extends JFrame{
     private GameRenderVIew render;
-    private JLayeredPane layeredPane;
-    private StatsPanelView statsPanel;
-    private LogsPanelView logs;
-    private PopUpView popup;
+    private final JLayeredPane layeredPane;
+    private final StatsPanelView statsPanel;
+    private final LogsPanelView logs;
+    private final PopUpView popup;
     private Hero hero;
     private StatsPanelView statsSelectPanel;
     private HeroCreationView heroCreation;
@@ -148,7 +148,7 @@ public class GameGUIController extends JFrame{
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (inFight == true || renderTime == true || game.getMap().playerReachedEdge() == true)
+                if (inFight || renderTime  || game.getMap().playerReachedEdge())
                     return ;
                 renderTime = true;
                 switch (e.getKeyCode()) {
@@ -241,12 +241,12 @@ public class GameGUIController extends JFrame{
 			boolean leave = true;
             while (leave) {
                 moveStatus = game.getMoveStatus();
-                if (moveStatus == MoveResult.ENEMY_ENCOUNTER && renderTime == false){
+                if (moveStatus == MoveResult.ENEMY_ENCOUNTER && !renderTime){
                     inFight = true;
                     game.setMoveStatus(MoveResult.INVALID_MOVE);
                     if (popup.enemyEncounter() == JOptionPane.YES_OPTION){
                         result = game.playerFight();
-                        if (result == false){
+                        if (!result){
                             handlePlayerLost();
                             return ;
                         }
@@ -256,9 +256,9 @@ public class GameGUIController extends JFrame{
                     }
                     else{
                         result = game.playerTryToRun();
-                        if (result == false){
+                        if (!result){
                             result = game.playerFight();
-                            if (result == false){
+                            if (!result){
                                 handlePlayerLost();
                                 return ;
                             }

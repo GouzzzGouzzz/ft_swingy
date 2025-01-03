@@ -26,7 +26,7 @@ public class LoaderController {
             return null;
         }
 
-        if (view.askToLoad() == false)
+        if (!view.askToLoad())
             return null;
         while (true) {
             id = view.askHeroId();

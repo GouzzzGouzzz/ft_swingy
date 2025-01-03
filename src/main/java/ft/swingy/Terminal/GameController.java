@@ -56,8 +56,8 @@ public class GameController {
 			input = null;
             gameModel.incrementTurn();
             if (gameModel.getMoveStatus() == MoveResult.ENEMY_ENCOUNTER){
-                if (gameView.enemyEncounter(read) == true){
-                    if (gameModel.playerFight() == false){
+                if (gameView.enemyEncounter(read)){
+                    if (!gameModel.playerFight()){
                         outputCombatLogs();
                         gameModel.gameOver();
                         return ;
@@ -67,7 +67,7 @@ public class GameController {
                         gameModel.dropArtifact();
                         if (gameModel.getDropArtifact() != null){
                             gameModel.getDropArtifact().printArtifact();
-                            if (gameView.takeArtifactsInput(read) == true){
+                            if (gameView.takeArtifactsInput(read)){
                                 gameModel.getHero().equipArtifact(gameModel.getDropArtifact());
                             }
                             gameModel.resetArtifact();
@@ -75,9 +75,9 @@ public class GameController {
                     };
                 }
                 else{
-                    if (gameModel.playerTryToRun() == false){
+                    if (!gameModel.playerTryToRun()){
                         outputCombatLogs();
-                        if (gameModel.playerFight() == false){
+                        if (!gameModel.playerFight()){
                             outputCombatLogs();
                             gameModel.gameOver();
                             return ;
@@ -86,7 +86,7 @@ public class GameController {
                             gameModel.dropArtifact();
                             if (gameModel.getDropArtifact() != null){
                                 gameModel.getDropArtifact().printArtifact();
-                                if (gameView.takeArtifactsInput(read) == true){
+                                if (gameView.takeArtifactsInput(read)){
                                     gameModel.getHero().equipArtifact(gameModel.getDropArtifact());
                                 }
                                 gameModel.resetArtifact();
@@ -103,7 +103,7 @@ public class GameController {
             if (gameModel.playerWon()){
                 gameModel.saveGame();
                 GameMapView.MapWithHeroStats(gameModel.getMap(), gameModel.getTurn(), gameModel.getHero());
-                if (gameView.continuePlaying(read) == true){
+                if (gameView.continuePlaying(read)){
                     gameModel.createNewMap();
                 }
                 else{
