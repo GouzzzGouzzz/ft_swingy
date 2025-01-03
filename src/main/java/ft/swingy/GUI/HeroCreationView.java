@@ -99,7 +99,7 @@ public class HeroCreationView {
                 heroBean.setType(classId);
                 heroBean.setName(heroName.getText());
                 violations = validator.validate(heroBean);
-                if (!violations.isEmpty()) {
+                if (!violations.isEmpty() || model.nameAlreadyTaken(heroName.getText())) {
                     root.getPopUp().invalidHero();
                     return ;
                 }

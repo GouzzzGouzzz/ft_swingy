@@ -37,7 +37,7 @@ public class HeroDirectorController {
             name = view.askForHeroName(read);
             heroBean.setName(name);
             violations = validator.validate(heroBean);
-            if (violations.isEmpty()) {
+            if (violations.isEmpty() && !model.nameAlreadyTaken(name)) {
                 break;
             }
             for (ConstraintViolation<HeroBean> violation : violations) {

@@ -37,6 +37,29 @@ public class HeroDirectorModel {
         return builder.getHero();
     }
 
+	public boolean nameAlreadyTaken(String name){
+		//parse file to match string inside all name lines
+		File file = new File("src/main/java/ft/swingy/save/saves.txt");
+		try {
+			BufferedReader fileReader = new BufferedReader(new FileReader(file));
+			String line;
+			while ((line = fileReader.readLine()) != null)
+			{
+				if (line.startsWith("Name:"))
+					if (line.substring(5).equals(name))
+					{
+						fileReader.close();
+						return true;
+					}
+			}
+			fileReader.close();
+		} catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+		return false;
+	}
+
     private static void inputStats(String line, String stats, BuilderBean builderB, ArtifactBean artifactB) {
         switch (stats) {
             case "Name:":
