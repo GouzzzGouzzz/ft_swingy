@@ -23,6 +23,10 @@ public class GameModel {
         moveStatus = gameMapModel.movePlayer(direction);
     }
 
+	public void revertPlayerMove(){
+		gameMapModel.revertPlayerMove();
+	}
+
     public boolean playerFight() {
         return hero.fightSimulation();
     }
@@ -51,7 +55,7 @@ public class GameModel {
         return gameMapModel.playerReachedEdge();
     }
 
-    public void createaNewMap() {
+    public void createNewMap() {
         gameMapModel = new GameMapModel(hero.getLevel());
         turn = 0;
         hero.regenerate();
@@ -80,6 +84,11 @@ public class GameModel {
     public MoveResult getMoveStatus() {
         return moveStatus;
     }
+
+    public Direction getLastMove() {
+        return gameMapModel.getLastMove();
+    }
+
     public void setMoveStatus(MoveResult moveStatus) {
         this.moveStatus = moveStatus;
     }

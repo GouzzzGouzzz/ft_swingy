@@ -104,7 +104,7 @@ public class GameGUIController extends JFrame{
 
     public void startGame(){
         game = new GameModel(hero, null);
-        game.createaNewMap();
+        game.createNewMap();
         render = new GameRenderVIew(game.getMap());
         //GamePane
         setupGamePane();
@@ -148,7 +148,7 @@ public class GameGUIController extends JFrame{
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (inFight == true || renderTime == true)
+                if (inFight == true || renderTime == true || game.getMap().playerReachedEdge() == true)
                     return ;
                 renderTime = true;
                 switch (e.getKeyCode()) {
@@ -207,18 +207,20 @@ public class GameGUIController extends JFrame{
         repaint();
     }
 
-    private void handlePlayerWin(){
+    private boolean handlePlayerWin(){
         game.saveGame();
         if (popup.continuePlaying() == JOptionPane.YES_OPTION){
-            game.createaNewMap();
+            game.createNewMap();
             render.setNewMap(game.getMap());
             inFight = false;
             revalidate();
             repaint();
+			return true;
         }
         else{
             popup.goodbye();
             dispose();
+			return false;
         }
     }
 
@@ -236,7 +238,8 @@ public class GameGUIController extends JFrame{
             MoveResult moveStatus = MoveResult.INVALID_MOVE;
             boolean result;
             statsPanel.setStats(game.getHero(), game.getTurn());
-            while (true) {
+			boolean leave = true;
+            while (leave) {
                 moveStatus = game.getMoveStatus();
                 if (moveStatus == MoveResult.ENEMY_ENCOUNTER && renderTime == false){
                     inFight = true;
@@ -264,13 +267,17 @@ public class GameGUIController extends JFrame{
                             }
                         }
                         else{
+							game.revertPlayerMove();
+							Direction lastMove = game.getLastMove();
+							render.revertMoveRender(game.getMap().revertInput(lastMove));
+							game.setMoveStatus(MoveResult.INVALID_MOVE);
                             inFight = false;
                             popup.runAway();
                         }
                     }
                 }
                 if (game.playerWon() && game.getMoveStatus() != MoveResult.ENEMY_ENCOUNTER){
-                    handlePlayerWin();
+                    leave = handlePlayerWin();
                 }
                 Thread.yield();
             }

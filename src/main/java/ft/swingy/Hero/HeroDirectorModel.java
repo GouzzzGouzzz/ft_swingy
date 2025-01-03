@@ -102,6 +102,7 @@ public class HeroDirectorModel {
                         }
                         if (i == 9){
                             id--;
+							break;
                         }
                         line = fileReader.readLine();
                     }

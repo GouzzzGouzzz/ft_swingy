@@ -53,7 +53,7 @@ public class GameController {
                 input = gameView.playerMoveInput(read);
                 gameModel.movePlayer(input);
             }
-            input = null;
+			input = null;
             gameModel.incrementTurn();
             if (gameModel.getMoveStatus() == MoveResult.ENEMY_ENCOUNTER){
                 if (gameView.enemyEncounter(read) == true){
@@ -94,6 +94,8 @@ public class GameController {
                         }
                     }
                     else{
+						gameModel.revertPlayerMove();
+						gameModel.setMoveStatus(MoveResult.INVALID_MOVE);
                         System.out.println("You've successfully ran away !");
                     }
                 }
@@ -102,7 +104,7 @@ public class GameController {
                 gameModel.saveGame();
                 GameMapView.MapWithHeroStats(gameModel.getMap(), gameModel.getTurn(), gameModel.getHero());
                 if (gameView.continuePlaying(read) == true){
-                    gameModel.createaNewMap();
+                    gameModel.createNewMap();
                 }
                 else{
                     System.out.println("Goodbye !");

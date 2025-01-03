@@ -48,7 +48,6 @@ public class HeroListView extends JPanel{
     }
 
     public int getHeroCount(){
-        System.out.println("FOUND: " + heroSaved);
         return heroSaved;
     }
 }

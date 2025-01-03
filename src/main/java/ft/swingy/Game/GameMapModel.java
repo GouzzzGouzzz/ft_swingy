@@ -3,19 +3,21 @@ import java.util.Random;
 
 public class GameMapModel {
     public int size;
+	Direction lastMove;
     int playerX;
     int playerY;
     public int[][] map;
 
     public GameMapModel(int level) {
+		lastMove = null;
         this.size = (level - 1) * 5 + 10 - (level % 2);
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
         map = new int[size][size];
         playerX = size / 2;
         playerY = size / 2;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 1; i < size-1; i++) {
+            for (int j = 1; j < size-1; j++) {
                 if (random.nextInt(100) < 25)
                     map[i][j] = ID.Enemy.getId();
                 else
@@ -41,10 +43,40 @@ public class GameMapModel {
         return playerY;
     }
 
+	public Direction getLastMove(){
+		return lastMove;
+	}
+
+	public Direction revertInput(Direction input){
+		switch (input){
+			case UP:
+				return Direction.DOWN;
+			case DOWN:
+				return Direction.UP;
+			case LEFT:
+				return Direction.RIGHT;
+			case RIGHT:
+				return Direction.LEFT;
+		}
+		return input;
+	}
+
+	public void revertPlayerMove(){
+		Direction reverted;
+		int prevX, prevY;
+
+		prevX = playerX;
+		prevY = playerY;
+		reverted = revertInput(lastMove);
+		movePlayer(reverted);
+		map[prevX][prevY] = ID.Enemy.getId();
+	}
+
     public MoveResult movePlayer(Direction direction) {
         switch (direction) {
             case UP:
                 if (playerY - 1 >= 0){
+					lastMove = Direction.UP;
                     map[playerX][playerY] = ID.Empty.getId();
                     playerY--;
                     if (map[playerX][playerY] == ID.Enemy.getId()){
@@ -57,6 +89,7 @@ public class GameMapModel {
                 break;
             case DOWN:
                 if (playerY + 1 < size){
+					lastMove = Direction.DOWN;
                     map[playerX][playerY] = ID.Empty.getId();
                     playerY++;
                     if (map[playerX][playerY] == ID.Enemy.getId()){
@@ -69,6 +102,7 @@ public class GameMapModel {
                 break;
             case LEFT:
                 if (playerX - 1 >= 0){
+					lastMove = Direction.LEFT;
                     map[playerX][playerY] = ID.Empty.getId();
                     playerX--;
                     if (map[playerX][playerY] == ID.Enemy.getId()){
@@ -81,6 +115,7 @@ public class GameMapModel {
                 break;
             case RIGHT:
                 if (playerX + 1 < size){
+					lastMove = Direction.RIGHT;
                     map[playerX][playerY] = ID.Empty.getId();
                     playerX++;
                     if (map[playerX][playerY] == ID.Enemy.getId()){

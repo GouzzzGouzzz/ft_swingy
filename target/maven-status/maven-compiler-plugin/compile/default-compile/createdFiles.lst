@@ -14,6 +14,7 @@ ft/swingy/Game/GameMapModel$1.class
 ft/swingy/GUI/HeroCreationView$5.class
 ft/swingy/GUI/HeroButtonView.class
 ft/swingy/Game/Direction.class
+ft/swingy/GUI/GameRenderVIew$1.class
 ft/swingy/Hero/BuilderBean.class
 ft/swingy/Hero/Builder.class
 ft/swingy/Game/GameModel.class

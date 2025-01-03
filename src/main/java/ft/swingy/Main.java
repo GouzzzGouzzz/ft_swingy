@@ -10,7 +10,7 @@ public class Main
     public static void main( String[] args )
     {
         if (args.length == 0 || args.length > 1){
-            System.out.println("Please provide a mode: terminal or gui, and only one of them");
+            System.out.println("Please provide a mode: console or gui, and only one of them");
             return ;
         }
         if (args[0].equals("console")){
@@ -25,7 +25,7 @@ public class Main
             });
         }
         else {
-            System.out.println("Please provide a mode: terminal or gui");
+            System.out.println("Please provide a mode: console or gui");
             return ;
         }
     }
